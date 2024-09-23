@@ -20,6 +20,10 @@ public class RegEx {
   //CONSTRUCTOR
   public RegEx(){}
 
+  public RegEx(String regEx) {
+    this.regEx = regEx;
+  }
+
   //MAIN
   public static void main(String arg[]) {
     System.out.println("Welcome to Bogota, Mr. Thomas Anderson.");
@@ -53,7 +57,7 @@ public class RegEx {
   }
 
   //FROM REGEX TO SYNTAX TREE
-  private static RegExTree parse() throws Exception {
+  public static RegExTree parse() throws Exception {
     //BEGIN DEBUG: set conditionnal to true for debug example
     if (false) throw new Exception();
     RegExTree example = exampleAhoUllman();
@@ -221,7 +225,7 @@ public class RegEx {
     subTrees = new ArrayList<RegExTree>();
     subTrees.add(a);
     subTrees.add(dotBCEtoile);
-    return new RegExTree(ALTERN, subTrees);s
+    return new RegExTree(ALTERN, subTrees);
   }
 }
 
