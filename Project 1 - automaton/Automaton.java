@@ -2,6 +2,7 @@ import java.util.Set;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Objects;
 
 class State {
     private static int count = 0;
@@ -50,8 +51,23 @@ class Transition {
         return symbol;
     }
 
+    @Override
     public String toString() {
         return from.toString() + " --" + symbol + "--> " + to.toString();
+    }
+
+    // Redéfinition de equals() et hashCode()
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof Transition)) return false;
+        Transition other = (Transition) obj;
+        return from.equals(other.from) && to.equals(other.to) && symbol == other.symbol;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(from, to, symbol);
     }
 }
 

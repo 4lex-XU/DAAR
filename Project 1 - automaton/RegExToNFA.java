@@ -36,6 +36,11 @@ public class RegExToNFA {
                 System.out.println("  >> DFA built.");
                 dfa.display();
 
+                // Minimize DFA
+                Automaton minimizedDfa = DfaMinimizer.minimize(dfa);
+                System.out.println("  >> Minimized DFA:");
+                minimizedDfa.display();
+
             } catch (Exception e) {
                 System.err.println("  >> ERROR: syntax error for regEx \"" + regExStr + "\".");
                 e.printStackTrace();
