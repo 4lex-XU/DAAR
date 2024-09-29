@@ -15,7 +15,6 @@ public class NfaToDfaConverter {
         queue.add(startClosure);
         dfa.addState(dfaStartState);
 
-        // Ensemble des symboles (alphabets) utilisés dans le NFA (excluant epsilon)
         Set<Character> symbols = nfa.getSymbols();
 
         // Étape 2 : Boucle principale de déterminisation
@@ -47,7 +46,6 @@ public class NfaToDfaConverter {
             }
         }
 
-        // **Nouvelle étape : Déterminer les états acceptants du DFA**
         // Pour chaque état du DFA, vérifier si l'ensemble des états NFA correspondants contient l'état acceptant du NFA
         for (Map.Entry<Set<State>, State> entry : stateSetsToState.entrySet()) {
             Set<State> nfaStates = entry.getKey();

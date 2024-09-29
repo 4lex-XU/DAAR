@@ -8,27 +8,17 @@ class State {
     private static int count = 0;
     private int id;
 
-    public State() {
-        this.id = count++;
-    }
+    public State() {this.id = count++;}
 
-    public int getId() {
-        return id;
-    }
+    public int getId() {return id;}
 
-    public String toString() {
-        return "S" + id;
-    }
+    public String toString() {return "S" + id;}
 
-    // Reset count for fresh numbering (if needed)
-    public static void resetCount() {
-        count = 0;
-    }
+    public static void resetCount() {count = 0;}
 }
 
 class Transition {
     public static final char EPSILON = 'ε';
-
     private State from;
     private State to;
     private char symbol;
@@ -39,24 +29,17 @@ class Transition {
         this.symbol = symbol;
     }
 
-    public State getFromState() {
-        return from;
-    }
+    public State getFromState() {return from;}
 
-    public State getToState() {
-        return to;
-    }
+    public State getToState() {return to;}
 
-    public char getSymbol() {
-        return symbol;
-    }
+    public char getSymbol() {return symbol;}
 
     @Override
     public String toString() {
         return from.toString() + " --" + symbol + "--> " + to.toString();
     }
 
-    // Redéfinition de equals() et hashCode()
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
@@ -95,18 +78,14 @@ class Automaton {
         this.acceptingStates.add(acceptingState);
     }
 
-    public State getStartState() {
-        return startState;
-    }
+    public State getStartState() {return startState;}
 
     public void setStartState(State startState) {
         this.startState = startState;
         states.add(startState);
     }
 
-    public State getAcceptingState() {
-        return acceptingState;
-    }
+    public State getAcceptingState() {return acceptingState;}
 
     public void setAcceptingState(State acceptingState) {
         this.acceptingState = acceptingState;
@@ -119,25 +98,15 @@ class Automaton {
         states.add(state);
     }
 
-    public Set<State> getAcceptingStates() {
-        return acceptingStates;
-    }
+    public Set<State> getAcceptingStates() {return acceptingStates;}
 
-    public Set<State> getStates() {
-        return states;
-    }
+    public Set<State> getStates() {return states;}
 
-    public Set<Transition> getTransitions() {
-        return transitions;
-    }
+    public Set<Transition> getTransitions() {return transitions;}
 
-    public void addState(State state) {
-        states.add(state);
-    }
+    public void addState(State state) {states.add(state);}
 
-    public void addStates(Set<State> states) {
-        this.states.addAll(states);
-    }
+    public void addStates(Set<State> states) {this.states.addAll(states);}
 
     public void addTransition(Transition transition) {
         transitions.add(transition);

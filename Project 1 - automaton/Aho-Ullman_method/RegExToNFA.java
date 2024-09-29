@@ -1,57 +1,6 @@
 import java.util.Scanner;
 
 public class RegExToNFA {
-    public static void main(String[] args) {
-        System.out.println("Welcome to Bogota, Mr. Thomas Anderson.");
-        String regExStr;
-        if (args.length != 0) {
-            regExStr = args[0];
-        } else {
-            Scanner scanner = new Scanner(System.in);
-            System.out.print("  >> Please enter a regEx: ");
-            regExStr = scanner.next();
-        }
-        System.out.println("  >> Parsing regEx \"" + regExStr + "\".");
-        System.out.println("  >> ...");
-
-        if (regExStr.length() < 1) {
-            System.err.println("  >> ERROR: empty regEx.");
-        } else {
-            System.out.print("  >> ASCII codes: [" + (int) regExStr.charAt(0));
-            for (int i = 1; i < regExStr.length(); i++)
-                System.out.print("," + (int) regExStr.charAt(i));
-            System.out.println("].");
-            try {
-                RegEx regex = new RegEx(regExStr);
-                RegExTree ret = regex.parse();
-                System.out.println("  >> Tree result: " + ret.toString() + ".");
-
-                // Build NFA from syntax tree
-                Automaton nfa = buildAutomaton(ret);
-                System.out.println("  >> NFA built.");
-                nfa.display();
-
-                // Determinize NFA to get DFA
-                Automaton dfa = NfaToDfaConverter.convertToDFA(nfa);
-                System.out.println("  >> DFA built.");
-                dfa.display();
-
-                // Minimize DFA
-                Automaton minimizedDfa = DfaMinimizer.minimize(dfa);
-                System.out.println("  >> Minimized DFA:");
-                minimizedDfa.display();
-
-            } catch (Exception e) {
-                System.err.println("  >> ERROR: syntax error for regEx \"" + regExStr + "\".");
-                e.printStackTrace();
-            }
-        }
-
-        System.out.println("  >> ...");
-        System.out.println("  >> Parsing completed.");
-        System.out.println("Goodbye Mr. Anderson.");
-    }
-
     // Build NFA from syntax tree
     public static Automaton buildAutomaton(RegExTree tree) throws Exception {
         if (tree.subTrees.isEmpty()) {
@@ -82,7 +31,6 @@ public class RegExToNFA {
             for (char c = 'A'; c <= 'Z'; c++) {
                 automaton.addTransition(new Transition(start, end, c));
             }
-            // Ajouter d'autres symboles si nécessaire
         } else {
             automaton.addTransition(new Transition(start, end, (char) root));
         }
