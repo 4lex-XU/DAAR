@@ -38,20 +38,22 @@ public class NfaToDfaConverter {
                         stateSetsToState.put(closure, dfaState);
                         queue.add(closure);
                         dfa.addState(dfaState);
-
-                        // Si l'un des états du NFA est acceptant, marquer l'état DFA comme acceptant
-                        for (State nfaState : closure) {
-                            if (nfaState.equals(nfa.getAcceptingState())) {
-                                dfa.addAcceptingState(dfaState);
-                                break;
-                            }
-                        }
                     } else {
                         dfaState = stateSetsToState.get(closure);
                     }
                     // Ajouter la transition au DFA
                     dfa.addTransition(new Transition(currentDfaState, dfaState, symbol));
                 }
+            }
+        }
+
+        // **Nouvelle étape : Déterminer les états acceptants du DFA**
+        // Pour chaque état du DFA, vérifier si l'ensemble des états NFA correspondants contient l'état acceptant du NFA
+        for (Map.Entry<Set<State>, State> entry : stateSetsToState.entrySet()) {
+            Set<State> nfaStates = entry.getKey();
+            State dfaState = entry.getValue();
+            if (nfaStates.contains(nfa.getAcceptingState())) {
+                dfa.addAcceptingState(dfaState);
             }
         }
 
