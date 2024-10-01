@@ -3,6 +3,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Objects;
+import java.util.List;
+import java.util.ArrayList;
 
 class State {
     private static int count = 0;
@@ -76,6 +78,8 @@ class Automaton {
     private Set<Transition> transitions;
     private Map<State, Set<Transition>> transitionsFromState;
 
+    private Map<State, Map<Character, State>> optimizedTransitionMap = new HashMap<>();
+
     public Automaton() {
         this.states = new HashSet<>();
         this.acceptingStates = new HashSet<>();
@@ -92,18 +96,26 @@ class Automaton {
         this.acceptingStates.add(acceptingState);
     }
 
+<<<<<<< HEAD:Project1-automaton/Aho-Ullman-method/Automaton.java
     public State getStartState() {
         return startState;
     }
+=======
+    public State getStartState() { return startState; }
+>>>>>>> 1916fca (Test de performance):Project 1 - automaton/Aho-Ullman_method/Automaton.java
 
     public void setStartState(State startState) {
         this.startState = startState;
         states.add(startState);
     }
 
+<<<<<<< HEAD:Project1-automaton/Aho-Ullman-method/Automaton.java
     public State getAcceptingState() {
         return acceptingState;
     }
+=======
+    public State getAcceptingState() { return acceptingState; }
+>>>>>>> 1916fca (Test de performance):Project 1 - automaton/Aho-Ullman_method/Automaton.java
 
     public void setAcceptingState(State acceptingState) {
         this.acceptingState = acceptingState;
@@ -116,6 +128,7 @@ class Automaton {
         states.add(state);
     }
 
+<<<<<<< HEAD:Project1-automaton/Aho-Ullman-method/Automaton.java
     public Set<State> getAcceptingStates() {
         return acceptingStates;
     }
@@ -135,6 +148,17 @@ class Automaton {
     public void addStates(Set<State> states) {
         this.states.addAll(states);
     }
+=======
+    public Set<State> getAcceptingStates() { return acceptingStates; }
+
+    public Set<State> getStates() { return states; }
+
+    public Set<Transition> getTransitions() { return transitions; }
+
+    public void addState(State state) { states.add(state); }
+
+    public void addStates(Set<State> states) { this.states.addAll(states); }
+>>>>>>> 1916fca (Test de performance):Project 1 - automaton/Aho-Ullman_method/Automaton.java
 
     public void addTransition(Transition transition) {
         transitions.add(transition);
@@ -163,6 +187,56 @@ class Automaton {
         return symbols;
     }
 
+    /**
+     * Construire une map optimisée pour les transitions.
+     * Cette map permet un accès rapide à l'état suivant en fonction de l'état actuel et du symbole.
+     */
+    public void buildOptimizedTransitionMap() {
+        for (State state : states) {
+            Set<Transition> transitionsSet = transitionsFromState.get(state);
+            if (transitionsSet != null) {
+                Map<Character, State> symbolToState = new HashMap<>();
+                for (Transition t : transitionsSet) {
+                    symbolToState.put(t.getSymbol(), t.getToState());
+                }
+                optimizedTransitionMap.put(state, symbolToState);
+            }
+        }
+    }
+
+    public List<Integer> searchOptimized(String text) {
+        List<Integer> matchPositions = new ArrayList<>();
+        int textLength = text.length();
+
+        for (int i = 0; i < textLength; i++) {
+            State currentState = startState;
+            int j = i;
+
+            while (j < textLength) {
+                char currentChar = text.charAt(j);
+                Map<Character, State> transitions = optimizedTransitionMap.get(currentState);
+
+                if (transitions != null && transitions.containsKey(currentChar)) {
+                    currentState = transitions.get(currentChar);
+
+                    if (acceptingStates.contains(currentState)) {
+                        matchPositions.add(i);
+                        break;
+                    }
+
+                    j++;
+                } else {
+                    break;
+                }
+            }
+        }
+
+        return matchPositions;
+    }
+
+    /**
+     * Affiche les détails de l'automate.
+     */
     public void display() {
         System.out.println("Automaton:");
         System.out.println("Start State: " + startState.toString());
