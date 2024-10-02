@@ -1,3 +1,5 @@
+package AhoUllmanMethod;
+
 import java.util.*;
 
 public class NfaToDfaConverter {

@@ -1,3 +1,5 @@
+package AhoUllmanMethod;
+
 public class RegExToNFA {
     // Build NFA from syntax tree
     public static Automaton buildAutomaton(RegExTree tree) throws Exception {

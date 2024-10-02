@@ -1,3 +1,5 @@
+package AhoUllmanMethod;
+
 import java.util.Scanner;
 import java.util.List;
 import java.io.IOException;

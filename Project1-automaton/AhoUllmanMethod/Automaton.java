@@ -1,3 +1,5 @@
+package AhoUllmanMethod;
+
 import java.util.Set;
 import java.util.HashSet;
 import java.util.Map;
@@ -70,7 +72,7 @@ class Transition {
     }
 }
 
-class Automaton {
+public class Automaton {
     private State startState;
     private State acceptingState;
     private Set<State> states;
