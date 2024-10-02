@@ -96,26 +96,14 @@ class Automaton {
         this.acceptingStates.add(acceptingState);
     }
 
-<<<<<<< HEAD:Project1-automaton/Aho-Ullman-method/Automaton.java
-    public State getStartState() {
-        return startState;
-    }
-=======
     public State getStartState() { return startState; }
->>>>>>> 1916fca (Test de performance):Project 1 - automaton/Aho-Ullman_method/Automaton.java
 
     public void setStartState(State startState) {
         this.startState = startState;
         states.add(startState);
     }
 
-<<<<<<< HEAD:Project1-automaton/Aho-Ullman-method/Automaton.java
-    public State getAcceptingState() {
-        return acceptingState;
-    }
-=======
     public State getAcceptingState() { return acceptingState; }
->>>>>>> 1916fca (Test de performance):Project 1 - automaton/Aho-Ullman_method/Automaton.java
 
     public void setAcceptingState(State acceptingState) {
         this.acceptingState = acceptingState;
@@ -128,27 +116,6 @@ class Automaton {
         states.add(state);
     }
 
-<<<<<<< HEAD:Project1-automaton/Aho-Ullman-method/Automaton.java
-    public Set<State> getAcceptingStates() {
-        return acceptingStates;
-    }
-
-    public Set<State> getStates() {
-        return states;
-    }
-
-    public Set<Transition> getTransitions() {
-        return transitions;
-    }
-
-    public void addState(State state) {
-        states.add(state);
-    }
-
-    public void addStates(Set<State> states) {
-        this.states.addAll(states);
-    }
-=======
     public Set<State> getAcceptingStates() { return acceptingStates; }
 
     public Set<State> getStates() { return states; }
@@ -158,7 +125,6 @@ class Automaton {
     public void addState(State state) { states.add(state); }
 
     public void addStates(Set<State> states) { this.states.addAll(states); }
->>>>>>> 1916fca (Test de performance):Project 1 - automaton/Aho-Ullman_method/Automaton.java
 
     public void addTransition(Transition transition) {
         transitions.add(transition);
