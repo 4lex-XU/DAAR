@@ -93,4 +93,46 @@ public class ChartUtil extends ApplicationFrame {
         frame.setVisible(true);
     }
 
+    public void createHistogramChart(String label1, Map<String, Double> inputData1,
+                                 String label2, Map<String, Double> inputData2) {
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+        
+        // Ajout de la première série de données
+        for (Map.Entry<String, Double> entry : inputData1.entrySet()) {
+            dataset.addValue(entry.getValue(), label1, entry.getKey());
+        }
+        
+        // Ajout de la deuxième série de données
+        for (Map.Entry<String, Double> entry : inputData2.entrySet()) {
+            dataset.addValue(entry.getValue(), label2, entry.getKey());
+        }
+
+        // Création du graphique
+        JFreeChart chart = ChartFactory.createBarChart( 
+                super.getTitle(),
+                "Regex",
+                "Valeur",
+                dataset,
+                PlotOrientation.VERTICAL,
+                true, 
+                true, 
+                false 
+        );
+        
+        // Personnalisation du graphique
+        CategoryPlot plot = chart.getCategoryPlot();
+        BarRenderer renderer = (BarRenderer) plot.getRenderer();
+        renderer.setSeriesPaint(0, Color.BLUE);
+        renderer.setSeriesPaint(1, Color.RED);
+        
+        // Affichage dans un JFrame
+        JPanel panel = new ChartPanel(chart);
+        JFrame frame = new JFrame("Histogrammes Comparatifs");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.add(panel);
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+    }
+
 }

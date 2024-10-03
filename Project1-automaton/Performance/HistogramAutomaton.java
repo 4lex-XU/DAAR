@@ -1,15 +1,48 @@
 package Performance;
 
 import AhoUllmanMethod.*;
-
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class HistogramAutomaton {
+
+    public static double executeEgrep(String regex, String fichier) throws Exception {
+        // Construire la commande egrep
+        ProcessBuilder builder = new ProcessBuilder("egrep", regex, fichier);
+        
+        // Rediriger l'erreur vers le flux d'entrée standard
+        builder.redirectErrorStream(true);
+        
+        // Démarrer le processus
+        long startTime = System.nanoTime();
+        Process process = builder.start();
+        
+        // Lire la sortie (facultatif, mais nécessaire pour éviter le blocage si le buffer est plein)
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+            while (reader.readLine() != null) {
+                // Vous pouvez traiter la sortie ici si nécessaire
+            }
+        }
+        
+        // Attendre la fin du processus
+        boolean finished = process.waitFor(1, TimeUnit.HOURS); // Timeout d'une heure
+        if (!finished) {
+            process.destroyForcibly();
+            throw new RuntimeException("egrep n'a pas terminé dans le délai imparti.");
+        }
+        long endTime = System.nanoTime();
+        
+        // Calculer la durée en millisecondes
+        double duration = (endTime - startTime) / 1_000_000.0;
+        return duration;
+    }
 
     public static void main(String[] arg) throws Exception {
         Path path = Paths.get("Project1-automaton/AhoUllmanMethod/B.txt");
@@ -18,8 +51,12 @@ public class HistogramAutomaton {
 
         Map<String, Double> datasetSearch = new HashMap<>();
         Map<String, Double> datasetBuild = new HashMap<>();
+        Map<String, Double> datasetEgrep = new HashMap<>();
 
         for (String reg : regExStr) {
+
+            double durationEgrep = executeEgrep(reg, "Project1-automaton/AhoUllmanMethod/B.txt");
+            System.out.println("  >> egrep Time: " + durationEgrep + " ms");
 
             // --- Mesure du Temps de Parsing ---
             long startTimeParsing = System.nanoTime();
@@ -93,8 +130,13 @@ public class HistogramAutomaton {
 
             datasetSearch.put(reg, durationSearch);
             datasetBuild.put(reg, durationBuild);
+            datasetEgrep.put(reg, durationEgrep);
 
         }
+
+
+        ChartUtil chartEgrep = new ChartUtil("Performance de l'automate");
+        chartEgrep.createHistogramChart("Temps de recherche (ms)", datasetSearch,"Temps de egrep (ms)", datasetEgrep);
 
         ChartUtil chartSearch = new ChartUtil("Performance de l'automate");
         chartSearch.createHistogramChart("Temps de recherche (ms)", datasetSearch);
