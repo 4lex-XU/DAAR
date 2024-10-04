@@ -8,8 +8,8 @@ import java.util.*;
 public class PerformanceAutomaton {
 
     public static void main(String[] arg) throws Exception {
-        String repeat = "abccd";
-        String regExStr = "a|b|c|d";
+        String repeat = "j'aimerais commander une pizza sans olives";
+        String regExStr = "pepperoni";
 
         Map<Integer, Long> datasetSearch = new HashMap<>();
         Map<Integer, Long> datasetBuild = new HashMap<>();

@@ -18,6 +18,9 @@ import org.jfree.ui.RefineryUtilities;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Map;
 
 public class ChartUtil extends ApplicationFrame {
@@ -135,6 +138,56 @@ public class ChartUtil extends ApplicationFrame {
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+    }
+
+    // Méthode pour mesurer le temps d'exécution de egrep avec un pattern et un fichier
+    public static double executeEgrep(String pattern, String fichier) throws IOException, InterruptedException {
+        // Construire la commande egrep
+        ProcessBuilder processBuilder = new ProcessBuilder("egrep", pattern, fichier);
+        processBuilder.redirectErrorStream(true); // Fusionner stdout et stderr
+
+        double elapsedTime = 0;
+        try {
+            // Enregistrer le temps de début en nanosecondes
+            long startTime = System.nanoTime();
+
+            // Démarrer le processus
+            Process process = processBuilder.start();
+
+            // Lire la sortie de egrep
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            String ligne;
+            while ((ligne = reader.readLine()) != null) {
+                System.out.println(ligne);
+            }
+
+            // Attendre la fin du processus
+            int exitCode = process.waitFor();
+
+            // Enregistrer le temps de fin en nanosecondes
+            long endTime = System.nanoTime();
+
+            // Calculer le temps écoulé en millisecondes avec décimales
+            elapsedTime = (endTime - startTime) / 1_000_000.0;
+
+            // Afficher le temps d'exécution avec précision décimale
+            System.out.printf("Temps d'exécution : %.3f millisecondes%n", elapsedTime);
+
+            // Vérifier si egrep s'est terminé correctement
+            if (exitCode != 0) {
+                System.err.println("La commande egrep s'est terminée avec le code de sortie " + exitCode);
+                System.exit(exitCode);
+            }
+
+        } catch (IOException e) {
+            System.err.println("Erreur lors de l'exécution de la commande egrep : " + e.getMessage());
+            System.exit(1);
+        } catch (InterruptedException e) {
+            System.err.println("Le processus a été interrompu : " + e.getMessage());
+            System.exit(1);
+        }
+
+        return elapsedTime;
     }
 
 }

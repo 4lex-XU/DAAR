@@ -100,7 +100,7 @@ public class KMP {
     }
 
     // extract content from filepath to string format
-    static StringBuilder extractContent(String path) {
+    public static StringBuilder extractContent(String path) {
         StringBuilder text = new StringBuilder();
         try {
             FileReader fileReader = new FileReader(path);

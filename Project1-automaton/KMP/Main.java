@@ -3,8 +3,6 @@ package KMP;
 import java.util.List;
 import java.util.Scanner;
 
-import static KMP.KMP.extractContent;
-
 public class Main {
     public static void main(String[] arg) {
         String path;
@@ -20,7 +18,7 @@ public class Main {
             pattern = scanner.next().toLowerCase();
         }
 
-        StringBuilder text = extractContent(path);
+        StringBuilder text = KMP.extractContent(path);
 
         KMP kmp = new KMP(pattern);
         List<Integer> results = kmp.search(text.toString());
