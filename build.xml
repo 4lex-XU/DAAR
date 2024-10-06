@@ -103,7 +103,7 @@
                 </fileset>
             </classpath>
             <arg value="a"/>
-            <arg value="${basedir}/Project1-automaton/Texts/Babylon.txt"/>
+            <arg value="${basedir}/${src.dir}/Texts/Babylon.txt"/>
         </java>
     </target>
 
@@ -116,7 +116,7 @@
                     <include name="**/*.jar"/>
                 </fileset>
             </classpath>
-            <arg value="${basedir}/Project1-automaton/Texts/Babylon.txt"/>
+            <arg value="${basedir}/${src.dir}/Texts/Babylon.txt"/>
             <arg value="a"/>
         </java>
     </target>
