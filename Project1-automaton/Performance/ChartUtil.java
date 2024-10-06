@@ -30,7 +30,7 @@ public class ChartUtil extends ApplicationFrame {
     }
 
     public void createTimeChart(String caption, String label, Map<Integer, Double> inputData) {
-        // create dataset
+        // création du jeu de données
         XYSeries seriesTime = new XYSeries(label);
         for (Map.Entry<Integer, Double> entry : inputData.entrySet()) {
             seriesTime.add(entry.getKey(), entry.getValue());
@@ -38,7 +38,7 @@ public class ChartUtil extends ApplicationFrame {
         XYSeriesCollection dataset = new XYSeriesCollection();
         dataset.addSeries(seriesTime);
 
-        // create chart
+        // création du graphe
         JFreeChart chart = ChartFactory.createXYLineChart(
                 super.getTitle(),
                 "Nombres de caractères",
@@ -50,12 +50,12 @@ public class ChartUtil extends ApplicationFrame {
                 false
         );
 
-        // add subtitle
+        // ajout sous titre
         TextTitle subtitle = new TextTitle(caption, new Font("SansSerif", Font.PLAIN, 12));
         subtitle.setPosition(RectangleEdge.TOP);
         chart.addSubtitle(subtitle);
 
-        // chart's layout
+        // Mis en page du graphe
         XYPlot plot = chart.getXYPlot();
         XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
         renderer.setSeriesPaint(0, Color.RED);
@@ -75,27 +75,6 @@ public class ChartUtil extends ApplicationFrame {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
         RefineryUtilities.centerFrameOnScreen(frame);
-    }
-
-    public void createHistogramChart(String label, Map<String, Double> inputData) {
-        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-        for (Map.Entry<String, Double> entry : inputData.entrySet()) {
-            dataset.addValue(entry.getValue(), label, entry.getKey());
-        }
-
-        JFreeChart chart = ChartFactory.createBarChart(
-                super.getTitle(),
-                "Regex",
-                label,
-                dataset
-        );
-        JPanel panel = new ChartPanel(chart);
-        JFrame frame = new JFrame(label);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.add(panel);
-        frame.pack();
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
     }
 
     public void createHistogramChart(String label1, Map<String, Double> inputData1,

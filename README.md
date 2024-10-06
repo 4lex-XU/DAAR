@@ -55,3 +55,13 @@ java Performance.KMP
 
 rm Project1-automaton/AhoUllmanMethod/*.class Project1-automaton/Performance/*.class Project1-automaton/KMP/*.class  
 ```
+
+Execution du script bash dans le dossier Performance : 
+```bash
+cd Project1-automaton/Performance
+chmod +x measure_egrep_performance.sh
+sudo apt-get install bc
+./measure_egrep_performance.sh  
+sudo apt install gnuplot
+gnuplot histogramme.gnuplot 
+```
