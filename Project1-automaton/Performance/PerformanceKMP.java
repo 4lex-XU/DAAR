@@ -20,7 +20,7 @@ public class PerformanceKMP {
                 "Project1-automaton/Texts/The_literature_of_the_Highlanders.txt",
                 "Project1-automaton/Texts/What_to_draw_and_how_to_draw_it.txt");
 
-        String pattern = "Sargon";
+        String pattern = "qsdfqsdf";
 
         Runtime runtime = Runtime.getRuntime();
         Map<Integer, Double> datasetTime = new HashMap<>();
@@ -30,9 +30,11 @@ public class PerformanceKMP {
         double sumMem = 0;
 
         for (int i = 1; i <= 100; i++) {
+            int nbCarac = 0;
             for (String path : paths) {
                 String content = String.valueOf(KMP.extractContent(path));
                 String text = content.repeat(i);
+                nbCarac += text.length();
 
                 KMP kmp = new KMP(pattern);
                 runtime.gc();
@@ -54,12 +56,12 @@ public class PerformanceKMP {
                 sumTime += (duration / 1000000.0);
                 sumMem += memoryUsed;
             }
-            datasetTime.put(i, sumTime / paths.size());
-            datasetMemory.put(i, sumMem / paths.size());
+            datasetTime.put(nbCarac, sumTime / paths.size());
+            datasetMemory.put(nbCarac, sumMem / paths.size());
         }
 
         ChartUtil chart = new ChartUtil("Performance de l'algorithme KMP");
-        chart.createTimeChart("text: " + paths + "\n" + "pattern: " + pattern, "Temps d'exécution (ms)", datasetTime);
-        chart.createTimeChart("text: " + paths + "\n" + "pattern: " + pattern, "Consommation mémoire (octets)", datasetMemory);
+        chart.createTimeChart("pattern: " + pattern, "Temps d'exécution (ms)", datasetTime);
+        chart.createTimeChart("pattern: " + pattern, "Consommation mémoire (octets)", datasetMemory);
     }
 }
