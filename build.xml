@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="DAAR" default="run" basedir=".">
+
+    <!-- Définition des propriétés -->
+    <property name="src.dir" value="Project1-automaton"/>
+    <property name="build.dir" value="build"/>
+    <property name="classes.dir" value="${build.dir}/classes"/>
+    <property name="jar.dir" value="${build.dir}/jar"/>
+    <property name="jar.name" value="DAAR.jar"/>
+    <property name="lib.dir" value="lib"/>
+    <property name="mainAutomaton.class" value="AhoUllmanMethod.Main"/>
+    <property name="mainKMP.class" value="KMP.Main"/>
+    <property name="PerformanceAutomaton.class" value="Performance.PerformanceAutomaton"/>
+    <property name="HistogramAutomaton.class" value="Performance.HistogramAutomaton"/>
+    <property name="PerformanceKMP.class" value="Performance.PerformanceKMP"/>
+
+    <!-- Nettoyage du projet -->
+    <target name="clean">
+        <echo message="Nettoyage du répertoire build..."/>
+        <delete dir="${build.dir}"/>
+    </target>
+
+    <!-- Préparation des répertoires de build -->
+    <target name="prepare">
+        <echo message="Création des répertoires de build..."/>
+        <mkdir dir="${classes.dir}"/>
+        <mkdir dir="${jar.dir}"/>
+    </target>
+
+    <!-- Compilation des sources -->
+    <target name="compile" depends="prepare">
+        <echo message="Compilation des sources..."/>
+        <javac srcdir="${src.dir}" destdir="${classes.dir}" includeantruntime="false" source="17" target="17">
+            <classpath>
+                <fileset dir="${lib.dir}">
+                    <include name="**/*.jar"/>
+                </fileset>
+            </classpath>
+        </javac>
+    </target>
+
+    <!-- Création du fichier JAR Automaton -->
+    <target name="jar-automaton" depends="compile">
+        <echo message="Création du fichier JAR..."/>
+        <jar destfile="${jar.dir}/${jar.name}" basedir="${classes.dir}">
+            <manifest>
+                <attribute name="Main-Class" value="${mainAutomaton.class}"/>
+            </manifest>
+        </jar>
+    </target>
+
+    <!-- Création du fichier JAR KMP -->
+    <target name="jar-kmp" depends="compile">
+        <echo message="Création du fichier JAR..."/>
+        <jar destfile="${jar.dir}/${jar.name}" basedir="${classes.dir}">
+            <manifest>
+                <attribute name="Main-Class" value="${mainKMP.class}"/>
+            </manifest>
+        </jar>
+    </target>
+
+    <!-- Création du fichier JAR Performance Automaton -->
+    <target name="jar-performance-automaton" depends="compile">
+        <echo message="Création du fichier JAR..."/>
+        <jar destfile="${jar.dir}/${jar.name}" basedir="${classes.dir}">
+            <manifest>
+                <attribute name="Main-Class" value="${PerformanceAutomaton.class}"/>
+                <attribute name="Class-Path" value="lib/jfreechart-1.5.3.jar lib/jcommon-1.0.24.jar"/>
+            </manifest>
+        </jar>
+    </target>
+
+    <!-- Création du fichier JAR Histogram Automaton -->
+    <target name="jar-histogram-automaton" depends="compile">
+        <echo message="Création du fichier JAR..."/>
+        <jar destfile="${jar.dir}/${jar.name}" basedir="${classes.dir}">
+            <manifest>
+                <attribute name="Main-Class" value="${HistogramAutomaton.class}"/>
+                <attribute name="Class-Path" value="lib/jfreechart-1.5.3.jar lib/jcommon-1.0.24.jar"/>
+            </manifest>
+        </jar>
+    </target>
+
+    <!-- Création du fichier JAR Performance KMP -->
+    <target name="jar-performance-kmp" depends="compile">
+        <echo message="Création du fichier JAR..."/>
+        <jar destfile="${jar.dir}/${jar.name}" basedir="${classes.dir}">
+            <manifest>
+                <attribute name="Main-Class" value="${PerformanceKMP.class}"/>
+                <attribute name="Class-Path" value="lib/jfreechart-1.5.3.jar lib/jcommon-1.0.24.jar"/>
+            </manifest>
+        </jar>
+    </target>
+
+    <!-- Exécution de l'application avec classpath -->
+    <target name="run-automaton" depends="jar-automaton">
+        <echo message="Exécution de main Automaton..."/>
+        <java classname="${mainAutomaton.class}" fork="true" failonerror="true">
+            <classpath>
+                <path path="${classes.dir}"/>
+                <fileset dir="${lib.dir}">
+                    <include name="**/*.jar"/>
+                </fileset>
+            </classpath>
+            <arg value="a"/>
+            <arg value="${basedir}/Project1-automaton/Texts/Babylon.txt"/>
+        </java>
+    </target>
+
+    <target name="run-kmp" depends="jar-kmp">
+        <echo message="Exécution de main kmp..."/>
+        <java classname="${mainKMP.class}" fork="true" failonerror="true">
+            <classpath>
+                <path path="${classes.dir}"/>
+                <fileset dir="${lib.dir}">
+                    <include name="**/*.jar"/>
+                </fileset>
+            </classpath>
+            <arg value="${basedir}/Project1-automaton/Texts/Babylon.txt"/>
+            <arg value="a"/>
+        </java>
+    </target>
+
+    <target name="run-performance-automaton" depends="jar-performance-automaton">
+        <echo message="Exécution de performance de l'automate..."/>
+        <java classname="${PerformanceAutomaton.class}" fork="true" failonerror="true">
+            <classpath>
+                <path path="${classes.dir}"/>
+                <fileset dir="${lib.dir}">
+                    <include name="**/*.jar"/>
+                </fileset>
+            </classpath>
+        </java>
+    </target>
+
+    <target name="run-histogram-automaton" depends="jar-histogram-automaton">
+        <echo message="Exécution de l'histogramme de l'automate..."/>
+        <java classname="${HistogramAutomaton.class}" fork="true" failonerror="true">
+            <classpath>
+                <path path="${classes.dir}"/>
+                <fileset dir="${lib.dir}">
+                    <include name="**/*.jar"/>
+                </fileset>
+            </classpath>
+        </java>
+    </target>
+
+    <target name="run-performance-kmp" depends="jar-performance-kmp">
+        <echo message="Exécution de performance de kmp..."/>
+        <java classname="${PerformanceKMP.class}" fork="true" failonerror="true">
+            <classpath>
+                <path path="${classes.dir}"/>
+                <fileset dir="${lib.dir}">
+                    <include name="**/*.jar"/>
+                </fileset>
+            </classpath>
+        </java>
+    </target>
+
+    <!-- Cible pour exécuter tous les runs -->
+    <target name="run" depends="run-automaton, run-kmp, run-performance-automaton, run-histogram-automaton, run-performance-kmp">
+        <echo message="Exécution de tous les runs..."/>
+    </target>
+</project>
