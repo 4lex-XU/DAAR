@@ -41,7 +41,7 @@ public class ChartUtil extends ApplicationFrame {
         // create chart
         JFreeChart chart = ChartFactory.createXYLineChart(
                 super.getTitle(),
-                "Taille du texte",
+                "Nombres de caractères",
                 label,
                 dataset,
                 PlotOrientation.VERTICAL,
@@ -141,46 +141,35 @@ public class ChartUtil extends ApplicationFrame {
     }
 
     // Méthode pour mesurer le temps d'exécution de egrep avec un pattern et un fichier
-    public static double executeEgrep(String pattern, String fichier) throws IOException, InterruptedException {
-        // Construire la commande egrep
-        ProcessBuilder processBuilder = new ProcessBuilder("egrep", pattern, fichier);
-        processBuilder.redirectErrorStream(true); // Fusionner stdout et stderr
+    public static double executeEgrep(String pattern, String fichier, int iterations) throws IOException, InterruptedException {
+        double totalDuration = 0.0;
 
-        double elapsedTime = 0;
-        try {
+        for (int i = 0; i < iterations; i++) {
+            // Construire la commande egrep
+            ProcessBuilder processBuilder = new ProcessBuilder("egrep", pattern, fichier);
+            // Rediriger la sortie standard vers /dev/null pour éviter de lire les résultats
+            processBuilder.redirectOutput(ProcessBuilder.Redirect.DISCARD);
+
             // Enregistrer le temps de début en nanosecondes
             long startTime = System.nanoTime();
 
             // Démarrer le processus
             Process process = processBuilder.start();
 
-            /*
-            // Lire la sortie de egrep
-            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            String ligne;
-            while ((ligne = reader.readLine()) != null) {
-                System.out.println(ligne);
-            }
-
             // Attendre la fin du processus
             int exitCode = process.waitFor();
-            */
 
             // Enregistrer le temps de fin en nanosecondes
             long endTime = System.nanoTime();
 
-            // Calculer le temps écoulé en millisecondes avec décimales
-            elapsedTime = (endTime - startTime) / 1_000_000.0;
+            // Calculer le temps écoulé en millisecondes
+            double elapsedTime = (endTime - startTime) / 1_000_000.0;
 
-            // Afficher le temps d'exécution avec précision décimale
-            System.out.printf("Temps d'exécution : %.3f millisecondes%n", elapsedTime);
-
-        } catch (IOException e) {
-            System.err.println("Erreur lors de l'exécution de la commande egrep : " + e.getMessage());
-            System.exit(1);
+            // Accumuler le temps écoulé
+            totalDuration += elapsedTime;
         }
 
-        return elapsedTime;
+        // Calculer la moyenne des durées
+        return iterations > 0 ? totalDuration / iterations : Double.NaN;
     }
-
 }

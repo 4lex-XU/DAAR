@@ -11,12 +11,10 @@ public class PerformanceKMP {
 
     public static void main(String[] arg) {
         List<String> paths = List.of(
-                "Project1-automaton/Texts/Abroad_with_Mark_Twain_and_Eugene_Field.txt",
                 "Project1-automaton/Texts/Babylon.txt",
                 "Project1-automaton/Texts/D_Europe_en_Amérique_par_le_pôle_nord.txt",
                 "Project1-automaton/Texts/De_Duodecim_Abusionibus_Saeculi.txt",
                 "Project1-automaton/Texts/Franc-Maçonnerie.txt",
-                "Project1-automaton/Texts/In_Monsun_und_Pori.txt",
                 "Project1-automaton/Texts/PonyTracks.txt",
                 "Project1-automaton/Texts/Sonniyhdistystä.txt",
                 "Project1-automaton/Texts/The_literature_of_the_Highlanders.txt",

@@ -1,5 +1,7 @@
 package AhoUllmanMethod;
 
+import Performance.ChartUtil;
+
 import java.util.Scanner;
 import java.util.List;
 import java.io.IOException;
@@ -13,19 +15,23 @@ public class Main {
         System.out.println("Welcome to Bogota, Mr. Thomas Anderson.");
         String regExStr = "";
         String textFilePath = "";
+        int iterations = 100;
 
         // Lecture des arguments de ligne de commande
         if (args.length >= 2) {
-            regExStr = args[0].toLowerCase(); // Convertir en minuscules
+            //regExStr = args[0].toLowerCase(); // Convertir en minuscules
+            regExStr = args[0];
             textFilePath = args[1];
         } else {
             // Si les arguments ne sont pas fournis, demander à l'utilisateur
             Scanner scanner = new Scanner(System.in);
             if (args.length < 1) {
                 System.out.print("  >> Veuillez entrer une expression régulière: ");
-                regExStr = scanner.nextLine().toLowerCase(); // Convertir en minuscules
+                //regExStr = scanner.nextLine().toLowerCase(); // Convertir en minuscules
+                regExStr = scanner.nextLine();
             } else {
-                regExStr = args[0].toLowerCase(); // Convertir en minuscules
+                //regExStr = args[0].toLowerCase(); // Convertir en minuscules
+                regExStr = args[0];
             }
 
             System.out.print("  >> Veuillez entrer le chemin vers le fichier texte: ");
@@ -56,90 +62,98 @@ public class Main {
                 System.out.print("," + (int) regExStr.charAt(i));
             System.out.println("].");
             try {
-                // --- Mesure du Temps de Parsing ---
-                long startTimeParsing = System.nanoTime();
-                // Parsing de l'expression régulière
-                RegEx regex = new RegEx(regExStr);
-                RegExTree ret = regex.parse();
-                long endTimeParsing = System.nanoTime();
-                double durationParsing = (endTimeParsing - startTimeParsing) / 1_000_000.0;
-                System.out.println("  >> Parsing Time: " + durationParsing + " ms");
+                double averageBuildTime = 0;
+                double averageSearchTime = 0;
 
-                System.out.println("  >> Tree result: " + ret.toString() + ".");
+                for(int i =0; i<iterations; i++){
+                    double durationSearch = 0;
+                    double durationBuild = 0;
+                    // --- Mesure du Temps de Parsing ---
+                    long startTimeParsing = System.nanoTime();
+                    // Parsing de l'expression régulière
+                    RegEx regex = new RegEx(regExStr);
+                    RegExTree ret = regex.parse();
+                    long endTimeParsing = System.nanoTime();
+                    double durationParsing = (endTimeParsing - startTimeParsing) / 1_000_000.0;
+                    System.out.println("  >> Parsing Time: " + durationParsing + " ms");
 
-                // --- Mesure du Temps de Construction du NFA ---
-                long startTimeNFA = System.nanoTime();
-                // Construction du NFA à partir de l'arbre syntaxique
-                Automaton nfa = RegExToNFA.buildAutomaton(ret);
-                long endTimeNFA = System.nanoTime();
-                double durationNFA = (endTimeNFA - startTimeNFA) / 1_000_000.0;
-                System.out.println("  >> NFA built in " + durationNFA + " ms.");
-                nfa.display();
+                    System.out.println("  >> Tree result: " + ret.toString() + ".");
 
-                // --- Mesure du Temps de Conversion du NFA en DFA ---
-                long startTimeDFA = System.nanoTime();
-                // Conversion du NFA en DFA
-                Automaton dfa = NfaToDfaConverter.convertToDFA(nfa);
-                long endTimeDFA = System.nanoTime();
-                double durationDFA = (endTimeDFA - startTimeDFA) / 1_000_000.0;
-                System.out.println("  >> DFA built in " + durationDFA + " ms.");
-                dfa.display();
+                    // --- Mesure du Temps de Construction du NFA ---
+                    long startTimeNFA = System.nanoTime();
+                    // Construction du NFA à partir de l'arbre syntaxique
+                    Automaton nfa = RegExToNFA.buildAutomaton(ret);
+                    long endTimeNFA = System.nanoTime();
+                    double durationNFA = (endTimeNFA - startTimeNFA) / 1_000_000.0;
+                    System.out.println("  >> NFA built in " + durationNFA + " ms.");
+                    nfa.display();
 
-                // --- Mesure du Temps de Minimisation du DFA ---
-                long startTimeMinimization = System.nanoTime();
-                // Minimisation du DFA
-                Automaton minimizedDfa = DfaMinimizer.minimize(dfa);
-                long endTimeMinimization = System.nanoTime();
-                double durationMinimization = (endTimeMinimization - startTimeMinimization) / 1_000_000.0;
-                System.out.println("  >> Minimized DFA built in " + durationMinimization + " ms.");
-                minimizedDfa.display();
+                    // --- Mesure du Temps de Conversion du NFA en DFA ---
+                    long startTimeDFA = System.nanoTime();
+                    // Conversion du NFA en DFA
+                    Automaton dfa = NfaToDfaConverter.convertToDFA(nfa);
+                    long endTimeDFA = System.nanoTime();
+                    double durationDFA = (endTimeDFA - startTimeDFA) / 1_000_000.0;
+                    System.out.println("  >> DFA built in " + durationDFA + " ms.");
+                    dfa.display();
 
-                // --- Mesure du Temps d'Optimisation des Transitions ---
-                long startTimeOptimization = System.nanoTime();
-                // Optionnel : Construire la map optimisée pour les transitions
-                minimizedDfa.buildOptimizedTransitionMap();
-                long endTimeOptimization = System.nanoTime();
-                double durationOptimization = (endTimeOptimization - startTimeOptimization) / 1_000_000.0;
-                System.out.println("  >> Transition Map optimized in " + durationOptimization + " ms.");
+                    // --- Mesure du Temps de Minimisation du DFA ---
+                    long startTimeMinimization = System.nanoTime();
+                    // Minimisation du DFA
+                    Automaton minimizedDfa = DfaMinimizer.minimize(dfa);
+                    long endTimeMinimization = System.nanoTime();
+                    double durationMinimization = (endTimeMinimization - startTimeMinimization) / 1_000_000.0;
+                    System.out.println("  >> Minimized DFA built in " + durationMinimization + " ms.");
+                    minimizedDfa.display();
 
-                // --- Mesure du Temps Total de Recherche ---
-                long timeSearch = 0;
-                // Recherche de correspondances dans chaque ligne du fichier texte
-                System.out.println("  >> Searching for matches in the text.");
-                int lineNumber = 1;
-                boolean anyMatch = false;
-                for (String line : lines) {
+                    // --- Mesure du Temps d'Optimisation des Transitions ---
+                    long startTimeOptimization = System.nanoTime();
+                    // Optionnel : Construire la map optimisée pour les transitions
+                    minimizedDfa.buildOptimizedTransitionMap();
+                    long endTimeOptimization = System.nanoTime();
+                    double durationOptimization = (endTimeOptimization - startTimeOptimization) / 1_000_000.0;
+                    System.out.println("  >> Transition Map optimized in " + durationOptimization + " ms.");
 
-                    // --- Mesure du Temps de Recherche par Ligne ---
-                    long startTimeSearchLine = System.nanoTime();
-                    String lowerCaseLine = line.toLowerCase(); // Convertir la ligne en minuscules
-                    List<Integer> positions = minimizedDfa.searchOptimized(lowerCaseLine);
-                    long endTimeSearchLine = System.nanoTime();
-                    timeSearch += (endTimeSearchLine - startTimeSearchLine);
+                    // --- Mesure du Temps Total de Recherche ---
+                    long timeSearch = 0;
+                    // Recherche de correspondances dans chaque ligne du fichier texte
+                    System.out.println("  >> Searching for matches in the text.");
+                    int lineNumber = 1;
+                    boolean anyMatch = false;
+                    for (String line : lines) {
 
-                    if (!positions.isEmpty()) {
-                        anyMatch = true;
-                        System.out.println("  >> Matches found in line " + lineNumber + " at positions: " + positions);
-                        for (int pos : positions) {
-                            // Afficher un extrait du texte autour de la position trouvée
-                            int start = Math.max(pos - 10, 0);
-                            int end = Math.min(pos + 10, lowerCaseLine.length());
-                            String excerpt = line.substring(start, end).replaceAll("\\s+", " ");
-                            System.out.println("    Match at index " + pos + ": " + excerpt);
+                        // --- Mesure du Temps de Recherche par Ligne ---
+                        long startTimeSearchLine = System.nanoTime();
+                        //String lowerCaseLine = line.toLowerCase(); // Convertir la ligne en minuscules
+                        //List<Integer> positions = minimizedDfa.searchOptimized(lowerCaseLine);
+                        List<Integer> positions = minimizedDfa.searchOptimized(line);
+                        long endTimeSearchLine = System.nanoTime();
+                        timeSearch += (endTimeSearchLine - startTimeSearchLine);
+
+                        if (!positions.isEmpty()) {
+                            anyMatch = true;
+                            System.out.println(line);
                         }
-                    }
-                    lineNumber++;
-                }
-                double durationSearch = (timeSearch) / 1_000_000.0;
-                double durationBuild = durationParsing + durationNFA + durationDFA + durationMinimization + durationOptimization;
-                double totalDuration = durationBuild + durationSearch;
-                System.out.println("  >> Total Build Time: " + durationBuild + " ms");
-                System.out.println("  >> Total Search Time: " + durationSearch + " ms");
-                System.out.println("  >> Total Time: " + totalDuration + " ms");
+                        lineNumber++;
 
-                if (!anyMatch) {
-                    System.out.println("  >> No matches found in the entire text.");
+                        /*if (!anyMatch) {
+                            System.out.println("  >> No matches found in line ...");
+                        }*/
+                    }
+                    durationBuild = durationParsing + durationNFA + durationDFA + durationMinimization + durationOptimization;
+                    durationSearch = (timeSearch) / 1_000_000.0;
+
+                    System.out.println("  >> Total Build Time: " + durationBuild + " ms");
+                    System.out.println("  >> Total Search Time: " + durationSearch + " ms");
+
+                    averageSearchTime += durationSearch;
+                    averageBuildTime += durationBuild;
                 }
+
+                double averageTotalTime = (averageBuildTime/iterations) + (averageSearchTime/iterations);
+                System.out.println("  >> Total Time Automaton: " + averageTotalTime + " ms");
+                System.out.println("  >> Total Egrep: " + ChartUtil.executeEgrep(regExStr, textFilePath, iterations) + " ms");
+
 
             } catch (Exception e) {
                 System.err.println("  >> ERREUR: Syntax error for regEx \"" + regExStr + "\".");

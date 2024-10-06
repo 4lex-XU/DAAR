@@ -24,11 +24,20 @@ public class RegExToNFA {
         State end = new State();
         Automaton automaton = new Automaton(start, end);
         if (root == RegEx.DOT) {
-            // DOT represents any character
-            for (char c = 'a'; c <= 'z'; c++) {
+            // DOT represents any printable character except newline
+            // Inclure les caractères ASCII printable
+            for (char c = 32; c <= 126; c++) {
+                if (c != '\n') {
+                    automaton.addTransition(new Transition(start, end, c));
+                }
+            }
+
+            // Inclure les caractères accents
+            for (char c = 160; c <= 255; c++) {
                 automaton.addTransition(new Transition(start, end, c));
             }
-            for (char c = 'A'; c <= 'Z'; c++) {
+
+            for (char c = 256; c <= 383; c++) {
                 automaton.addTransition(new Transition(start, end, c));
             }
         } else {
