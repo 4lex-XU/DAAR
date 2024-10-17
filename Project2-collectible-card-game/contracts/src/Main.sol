@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8;
 
-import "./CardStruct.sol";
+import "./Struct.sol";
 import "./Collection.sol";
 import "./Ownable.sol";
 

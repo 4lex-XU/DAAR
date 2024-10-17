@@ -2,7 +2,7 @@
 pragma solidity ^0.8;
 
 import "./ERC721.sol";
-import "./CardStruct.sol";
+import "./Struct.sol";
 import "./Ownable.sol";
 
 contract Collection is Ownable, ERC721{

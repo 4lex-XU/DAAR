@@ -1,7 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import styles from './styles.module.css'
+import 'bootstrap/dist/css/bootstrap.min.css';
 import * as ethereum from '@/lib/ethereum'
 import * as main from '@/lib/main'
+import Home from './components/Home'
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 
 type Canceler = () => void
 const useAffect = (
@@ -42,8 +47,8 @@ const useWallet = () => {
 export const App = () => {
   const wallet = useWallet()
   return (
-    <div className={styles.body}>
-      <h1>Welcome to Pokémon TCG</h1>
+    <div>
+      <Home/>
     </div>
   )
 }
