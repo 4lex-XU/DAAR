@@ -1,3 +1,6 @@
+import * as ethereum from '@/lib/ethereum'
+import * as main from '@/lib/main'
+
 export interface PokemonSet {
   id: string;
   name: string;
@@ -19,4 +22,16 @@ export interface PokemonCard {
     small: string;
     large: string;
     };
+}
+
+export interface WalletProps {
+  wallet: {
+      details: ethereum.Details;
+      contract: main.Main;
+  };
+}
+
+export interface Card {
+  num: number;
+  img: string;
 }

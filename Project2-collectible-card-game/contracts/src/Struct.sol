@@ -2,6 +2,6 @@
 pragma solidity ^0.8.10;
 
 struct Card {
-    uint num;
+    string num;
     string img;
 }

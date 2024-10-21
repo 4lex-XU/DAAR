@@ -48,7 +48,7 @@ export const App = () => {
   const wallet = useWallet()
   return (
     <div>
-      <Home/>
+      <Home wallet={wallet}/>
     </div>
   )
 }
