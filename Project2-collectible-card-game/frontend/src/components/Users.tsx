@@ -52,7 +52,7 @@ const Users: React.FC = () => {
                   <Card.Body>
                     <Card.Title>Compte {index + 1}</Card.Title>
                     <Card.Text>{account}</Card.Text>
-                    <Link to={`/utilisateur/${index}`} className="btn btn-light">
+                    <Link to={`/utilisateur/${account}`} className="btn btn-light">
                       Voir les détails
                     </Link>
                   </Card.Body>

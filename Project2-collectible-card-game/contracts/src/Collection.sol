@@ -19,24 +19,30 @@ contract Collection is Ownable, ERC721{
   mapping (uint => address) public cardToOwner;
   // indique le nombre de carte que possede un utilisateur
   mapping (address => uint) ownerCardCount;
+  mapping(string => bool) private cardExists;
 
   modifier onlyOwnerOf(uint _cardId) {
     require(msg.sender == cardToOwner[_cardId]);
     _;
   }
 
-  constructor(string memory _name, uint _cardCount) {
+  constructor(address initialOwner, string memory _name, uint _cardCount) Ownable(initialOwner) {
     name = _name;
     cardCount = _cardCount;
   }
 
-  function createCard(string memory _num, string memory _img) external {
+  function createCard(string memory _num, string memory _img) onlyOwner external {
     require(cards.length < cardCount, "Nombre de cartes maximum atteint");
     cards.push(Card(_num, _img));
+    cardExists[_num] = true;
     uint id = cards.length - 1;
     cardToOwner[id] = msg.sender;
     ownerCardCount[msg.sender]++;
     emit NewCard(id, _num, _img);
+  }
+
+  function existCard(string memory _num) external view returns (bool) {
+    return cardExists[_num];
   }
 
   function getCards(address _owner) external view returns (Card[] memory) {

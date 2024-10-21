@@ -1,10 +1,12 @@
 import React from 'react';
 import { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom';
 import { WalletProps, Card } from '../apiPokeTCG/types';
 
 const UserCard: React.FC<WalletProps> = ({wallet}) => {
     const [cards, setCardsValue] = useState<Card[]>([])
-  
+    const { account } = useParams();
+
     useEffect(() => {
       if (wallet?.contract && wallet?.details.account) {
         getCardsByOwner();
@@ -14,8 +16,8 @@ const UserCard: React.FC<WalletProps> = ({wallet}) => {
     async function getCardsByOwner() {
         if (wallet?.contract && wallet?.details.account) {
             try {
-            const data = await wallet.contract.getCardsByOwner(wallet.details.account)
-            const formattedCards = data.map((tuple: [number, string]) => ({
+            const data = await wallet.contract.getCardsByOwner(account!)
+            const formattedCards = data.map((tuple: [string, string]) => ({
                 num: tuple[0],
                 img: tuple[1]
             }));

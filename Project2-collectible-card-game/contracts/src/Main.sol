@@ -12,24 +12,28 @@ contract Main is Ownable {
   uint private count;
   mapping(uint => Collection) private collections;
 
-  constructor() Ownable(){
+  constructor() Ownable(0x8626f6940E2eb28930eFb4CeF49B2d1F2C9C1199){
     count = 0;
   }
 
-  fallback() external payable {
-  }
+  fallback() external payable {}
+  receive() external payable {}
 
-  receive() external payable {
-  }
-
-  function createCollection(string memory name, uint cardCount) private {
-    collections[count] = new Collection(name, cardCount);
+  function createCollection(string memory name, uint cardCount) onlyOwner internal returns (uint) {
+    address initialOwner = address(this);
+    collections[count] = new Collection(initialOwner, name, cardCount);
     emit NewCollection(count, name, cardCount);
     count++;
+    return count-1;
   }
+
+  error CollectionNonExistante(uint id, uint count);
 
   function getCollectionById(uint _id) internal view returns (Collection) {
     require(count > 0, "Aucune collection existante");
+    if (_id >= count) {
+      revert CollectionNonExistante(_id, count);
+    }
     require(_id < count, "Collection non existante");
     return collections[_id];
   }
@@ -68,19 +72,21 @@ contract Main is Ownable {
     return result;
   }
 
-  function createAndAssignCard(string memory _num, string memory _img, uint _id, address _to) private {
+  function createAndAssignCard(string memory _num, string memory _img, uint _id, address _to) onlyOwner internal {
     Collection collection = getCollectionById(_id);
-    collection.createCard(_num, _img);
+    bool exist = collection.existCard(_num);
+    if(!exist) {
+      collection.createCard(_num, _img);
+    }
     collection.transfer(_to, collection.getTokenIdByCardNum(_num));
   }
 
-  function createAndAssignCards(string[] memory _num, string[] memory _img, string memory _name, uint _cardCount, address _to) external {
+  function createAndAssignCards(string[] memory _num, string[] memory _img, string memory _name, uint _cardCount, address _to)  onlyOwner external {
     require(_num.length == _img.length, "Taille des tableaux non correspondante");
     uint idCategory =  getIdCollectionByName(_name);
     if(idCategory == type(uint256).max) {
-      createCollection(_name, _cardCount);
+      idCategory = createCollection(_name, _cardCount);
     }
-
     for (uint i = 0; i <_num.length; i++) {
       createAndAssignCard(_num[i], _img[i], idCategory, _to);
     }
