@@ -7,6 +7,7 @@ import Home from './components/Home'
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import './app.css';
 
 type Canceler = () => void
 const useAffect = (

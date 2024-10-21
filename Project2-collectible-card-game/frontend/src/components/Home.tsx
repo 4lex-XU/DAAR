@@ -4,8 +4,6 @@ import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import PokemonSets from './PokemonSets';
 import Users from './Users';
 import UserCard from './UserCard';
-import Mint from './Mint';
-import logo from './Pokemon_logo.webp'
 import { WalletProps} from '../apiPokeTCG/types';
 
 const Home: React.FC<WalletProps> = ({wallet}) => {
@@ -28,7 +26,6 @@ const Home: React.FC<WalletProps> = ({wallet}) => {
               <Nav.Link as={Link} to="/">Home</Nav.Link>
               <Nav.Link as={Link} to="/sets">Sets</Nav.Link>
               <Nav.Link as={Link} to="/utilisateurs">Utilisateurs</Nav.Link>
-              <Nav.Link as={Link} to="/mint">Mint</Nav.Link>
             </Nav>
           </Navbar.Collapse>
         </Container>
@@ -41,7 +38,6 @@ const Home: React.FC<WalletProps> = ({wallet}) => {
           <Route path="/sets" element={<PokemonSets />} />
           <Route path="/utilisateurs" element={<Users />} />
           <Route path="/utilisateur/:id" element={<UserCard wallet={wallet}/>} />
-          <Route path="/mint" element={<Mint />} />
         </Routes>
       </Container>
     </Router>
