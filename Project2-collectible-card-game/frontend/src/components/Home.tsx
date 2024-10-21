@@ -37,7 +37,7 @@ const Home: React.FC<WalletProps> = ({wallet}) => {
           <Route path="/" element={<HomePage />} />
           <Route path="/sets" element={<PokemonSets />} />
           <Route path="/utilisateurs" element={<Users />} />
-          <Route path="/utilisateur/:id" element={<UserCard wallet={wallet}/>} />
+          <Route path="/utilisateur/:account" element={<UserCard wallet={wallet}/>} />
         </Routes>
       </Container>
     </Router>
