@@ -246,7 +246,7 @@ const PokemonSets: React.FC = () => {
             "stateMutability": "payable",
             "type": "receive"
           }
-        ] 
+        ]
         let address = "0x5FbDB2315678afecb367f032d93F642f64180aa3"
         return await new window.web3.eth.Contract(abi, address);
     }
@@ -358,12 +358,38 @@ const PokemonSets: React.FC = () => {
           {loadingCards ? (
             <p>Chargement des cartes...</p>
           ) : (
-            <div>
+            <div
+                style={{
+                  display: 'inline-block',
+                  padding: '20px',
+                  backgroundColor: 'rgba(0, 0, 0, 0.5)', // Fond sombre avec transparence
+                  borderRadius: '10px',
+                }}
+              >
+
               {selectedSet && (
                 <div style={{ textAlign: 'center' }}>
                   <img src={selectedSet.images.logo} alt={selectedSet.name} width="200" />
                 </div>
               )}
+              <br/>
+              {selectedCards.length > 0 && (
+                  <div>
+                    <p>Cartes sélectionnées : {selectedCards.length}</p>
+                    <input type="text" onChange={handleValue} placeholder="Entrer une adresse"></input>
+                    <Button onClick={mintCards}>
+                      Créer et assigner les cartes sélectionnées
+                    </Button>
+                    <Button
+                    variant="warning"
+                    style={{ marginLeft: '10px' }}
+                    onClick={() => setSelectedCards([])}
+                  >
+                    Tout désélectionner
+                  </Button>
+                  </div>
+                )}
+                <br/>
               <Container>
                 <Row>
                   {cards.map((card) => (
@@ -371,8 +397,9 @@ const PokemonSets: React.FC = () => {
                       <div
                         onClick={() => handleCardSelect(card)}
                         style={{
-                          border: isCardSelected(card.id) ? '2px solid blue' : 'none',
-                          cursor: 'pointer'
+                          border: isCardSelected(card.id) ? '2px solid red' : 'none',
+                          cursor: 'pointer',
+                          marginBottom: '20px'
                         }}
                       >
                         <img src={card.images.small} alt={card.name} />
@@ -381,15 +408,7 @@ const PokemonSets: React.FC = () => {
                   ))}
                 </Row>
               </Container>
-              {selectedCards.length > 0 && (
-                <div style={{ marginTop: '20px' }}>
-                  <p>Cartes sélectionnées : {selectedCards.length}</p>
-                  <input type="text" onChange={handleValue} placeholder="Entrer une adresse"></input>
-                  <Button onClick={mintCards}>
-                    Créer et assigner les cartes sélectionnées
-                  </Button>
-                </div>
-              )}
+
             </div>
           )}
         </div>

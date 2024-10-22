@@ -1,51 +1,57 @@
-import React from 'react';
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { WalletProps, Card } from '../apiPokeTCG/types';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 
-const UserCard: React.FC<WalletProps> = ({wallet}) => {
-    const [cards, setCardsValue] = useState<Card[]>([])
-    const { account } = useParams();
+const UserCard: React.FC<WalletProps> = ({ wallet }) => {
+  const [cards, setCardsValue] = useState<Card[]>([]);
+  const { account } = useParams();
 
-    useEffect(() => {
-      if (wallet?.contract && wallet?.details.account) {
-        getCardsByOwner();
-      }
-    },[wallet])
-  
-    async function getCardsByOwner() {
-        if (wallet?.contract && wallet?.details.account) {
-            try {
-            const data = await wallet.contract.getCardsByOwner(account!)
-            const formattedCards = data.map((tuple: [string, string]) => ({
-                num: tuple[0],
-                img: tuple[1]
-            }));
-            setCardsValue(formattedCards);
-            console.log('getCardsByOwner: '+wallet.details.account+' reussie !')
-            } catch (err) {
-            console.log('Erreur lors du getCardsByOwner.')
-            console.error(err)
-            }
-        }
+  useEffect(() => {
+    if (wallet?.contract && wallet?.details.account) {
+      getCardsByOwner();
     }
+  }, [wallet]);
 
-    return (
-        <div>
-        <h1>Mes Cartes</h1>
-        <ul>
-            {cards.length > 0 ? (
-            cards.map((card, index) => (
-                <li key={index}>
-                Carte #{card.num}: {card.img}
-                </li>
-            ))
-            ) : (
-                <li>Aucune carte trouvée</li>
-            )}
-        </ul>
-        </div>
-    );
-}
+  async function getCardsByOwner() {
+    if (wallet?.contract && wallet?.details.account) {
+      try {
+        const data = await wallet.contract.getCardsByOwner(account!);
+        const formattedCards = data.map((tuple: [string, string]) => ({
+          num: tuple[0],
+          img: tuple[1]
+        }));
+        setCardsValue(formattedCards);
+        console.log('getCardsByOwner: ' + wallet.details.account + ' réussie !');
+      } catch (err) {
+        console.log('Erreur lors du getCardsByOwner.');
+        console.error(err);
+      }
+    }
+  }
+
+  return (
+    <div>
+      <h1>Ma Collection</h1>
+      {cards.length > 0 ? (
+        <Container>
+          <Row>
+            {cards.map((card, index) => (
+              <Col key={index} xs={12} sm={6} md={4} lg={3}>
+                <div className="card-item">
+                  <img src={card.img} alt={`Carte ${card.num}`} style={{ width: '100%' }} />
+                </div>
+              </Col>
+            ))}
+          </Row>
+        </Container>
+      ) : (
+        <p>Aucune carte trouvée</p>
+      )}
+    </div>
+  );
+};
 
 export default UserCard;
