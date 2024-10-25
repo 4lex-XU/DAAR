@@ -511,7 +511,7 @@ const PokemonSets: React.FC = () => {
               {selectedCards.length > 0 && (
                   <div>
                     <p>Cartes sélectionnées : {selectedCards.length}</p>
-                    <input type="text" onChange={handleValue} placeholder="Entrer une adresse"></input>
+                    <input type="text" onChange={handleUserValue} placeholder="Entrer une adresse"></input>
                     <Button onClick={mintCards}>
                       Créer et assigner les cartes sélectionnées
                     </Button>
@@ -521,6 +521,10 @@ const PokemonSets: React.FC = () => {
                     onClick={() => setSelectedCards([])}
                   >
                     Tout désélectionner
+                  </Button>
+                  <input type="text" onChange={handleNameValue} placeholder="Entrer le nom du nouveau booster"></input>
+                  <Button onClick={createBooster}>
+                    Créer un booster avec les cartes sélectionnées
                   </Button>
                   </div>
                 )}
@@ -543,19 +547,6 @@ const PokemonSets: React.FC = () => {
                   ))}
                 </Row>
               </Container>
-              {selectedCards.length > 0 && (
-                <div style={{ marginTop: '20px' }}>
-                  <p>Cartes sélectionnées : {selectedCards.length}</p>
-                  <input type="text" onChange={handleUserValue} placeholder="Entrer une adresse"></input>
-                  <Button onClick={mintCards}>
-                    Créer et assigner les cartes sélectionnées
-                  </Button>
-                  <input type="text" onChange={handleNameValue} placeholder="Entrer le nom du nouveau booster"></input>
-                  <Button onClick={createBooster}>
-                    Créer un booster avec les cartes sélectionnées
-                  </Button>
-                </div>
-              )}
             </div>
           )}
         </div>
