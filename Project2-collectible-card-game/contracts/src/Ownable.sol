@@ -24,7 +24,7 @@ contract Ownable {
      * @dev Throws if called by any account other than the owner.
    */
     modifier onlyOwner() {
-        require(msg.sender == owner, "Caller is not the owner");
+        require(msg.sender == owner, "L'appelant n'est pas l'administrateur");
         _;
     }
 

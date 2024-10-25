@@ -9,28 +9,30 @@ const UserCard: React.FC<WalletProps> = ({ wallet }) => {
   const [cards, setCardsValue] = useState<Card[]>([]);
   const { account } = useParams();
 
-  useEffect(() => {
-    if (wallet?.contract && wallet?.details.account) {
-      getCardsByOwner();
-    }
-  }, [wallet]);
-
-  async function getCardsByOwner() {
-    if (wallet?.contract && wallet?.details.account) {
-      try {
-        const data = await wallet.contract.getCardsByOwner(account!);
-        const formattedCards = data.map((tuple: [string, string]) => ({
-          num: tuple[0],
-          img: tuple[1]
-        }));
-        setCardsValue(formattedCards);
-        console.log('getCardsByOwner: ' + wallet.details.account + ' réussie !');
-      } catch (err) {
-        console.log('Erreur lors du getCardsByOwner.');
-        console.error(err);
+    useEffect(() => {
+      if (wallet?.contract && wallet?.details.account) {
+        getCardsByOwner();
       }
+    },[wallet])
+
+    async function getCardsByOwner() {
+        if (wallet?.contract && wallet?.details.account) {
+            try {
+            const data = await wallet.contract.getCardsByOwner(account!)
+            const formattedCards = data.map((tuple: any) => ({
+                num: tuple.num || tuple[0],
+                img: tuple.img || tuple[1],
+                nameCollection: tuple.nameCollection || tuple[2],
+                cardCountCollection: tuple.cardCountCollection || tuple[3]
+            }));
+            setCardsValue(formattedCards);
+            console.log('getCardsByOwner: '+wallet.details.account+' reussie !')
+            } catch (err) {
+            console.log('Erreur lors du getCardsByOwner.')
+            console.error(err)
+            }
+        }
     }
-  }
 
   return (
     <div>

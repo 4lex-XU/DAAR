@@ -5,7 +5,7 @@ import "./ERC721.sol";
 import "./Struct.sol";
 import "./Ownable.sol";
 
-contract Collection is Ownable, ERC721{
+contract Collection is Ownable, ERC721 {
 
   event NewCard(uint cardId, string num, string img);
 
@@ -31,9 +31,9 @@ contract Collection is Ownable, ERC721{
     cardCount = _cardCount;
   }
 
-  function createCard(string memory _num, string memory _img) onlyOwner external {
+  function createCard(string memory _num, string memory _img) external {
     require(cards.length < cardCount, "Nombre de cartes maximum atteint");
-    cards.push(Card(_num, _img));
+    cards.push(Card(_num, _img, name, cardCount));
     cardExists[_num] = true;
     uint id = cards.length - 1;
     cardToOwner[id] = msg.sender;
@@ -46,7 +46,6 @@ contract Collection is Ownable, ERC721{
   }
 
   function getCards(address _owner) external view returns (Card[] memory) {
-    require(cards.length > 0, "Aucune carte existante");
     Card[] memory result = new Card[](ownerCardCount[_owner]);
     uint cpt = 0;
     for (uint i = 0; i < cards.length; i++) {
@@ -59,10 +58,8 @@ contract Collection is Ownable, ERC721{
   }
 
   function getTokenIdByCardNum(string memory _num) external view returns (uint tokenId) {
-    require(cards.length > 0, "Aucune carte existante");
     for (uint i = 0; i < cards.length; i++) {
       if (keccak256(abi.encodePacked(cards[i].num)) == keccak256(abi.encodePacked(_num))) {
-
         return i;
       }
     }

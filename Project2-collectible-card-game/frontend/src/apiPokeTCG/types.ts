@@ -34,4 +34,6 @@ export interface WalletProps {
 export interface Card {
   num: string;
   img: string;
+  nameCollection: string;
+  cardCountCollection: number;
 }
