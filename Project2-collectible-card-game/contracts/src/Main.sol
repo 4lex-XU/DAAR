@@ -101,11 +101,12 @@ contract Main is Ownable {
     countBooster++;
   }
 
-  function openBooster(string memory name, address _to) external {
+  function openBooster(string memory name, address _to) external payable {
     require(address(boosters[name]) != address(0), "booster inexistant");
     require(msg.sender != owner, unicode"L'administrateur ne peut pas transférer la propriété à lui-meme");
     Booster current = boosters[name];
     Card[] memory result = new Card[](current.max());
+    payable(owner).transfer(msg.value);
     for(uint i = 0; i < current.max(); i++) {
       (string memory num, string memory img, string memory nameCollection, uint cardCountCollection) = current.boosterCards(i);
       createAndAssignCard(num, img, nameCollection, cardCountCollection, _to);
@@ -124,8 +125,8 @@ contract Main is Ownable {
     tradings[collectionName].buyCard(cardId, sender);
   }
 
-  function removeSale(string memory collectionName, string memory cardId) external {
-    tradings[collectionName].removeSale(cardId);
+  function removeSale(string memory collectionName, string memory cardId, address sender) external {
+    tradings[collectionName].removeSale(cardId, sender);
   }
 
   function getAllSales() external view returns (uint256[] memory ids, Card[] memory cards) {

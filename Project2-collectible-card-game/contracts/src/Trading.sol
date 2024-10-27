@@ -25,12 +25,12 @@ contract Trading is Ownable{
         collection = initialCollection;
     }
 
-    modifier onlyCardOwner(string memory _cardId) {
-        require(msg.sender == collection.ownerOf(collection.getTokenIdByCardNum(_cardId)), unicode"Vous n'êtes pas le propriétaire de cette carte.");
+    modifier onlyCardOwner(string memory _cardId, address sender) {
+        require(sender == collection.ownerOf(collection.getTokenIdByCardNum(_cardId)), unicode"Vous n'êtes pas le propriétaire de cette carte.");
         _;
     }
 
-    function listCardForSale(string memory _cardId, address sender) external {
+    function listCardForSale(string memory _cardId, address sender) external onlyCardOwner(_cardId, sender) {
         require(sales[_cardId].isAvailable == false, unicode"Trading de la carte deja effectué");
         sales[_cardId] = Sale(saleCounter, _cardId, sender, true);
         saleNames.push(_cardId);
@@ -43,16 +43,16 @@ contract Trading is Ownable{
         Sale storage sale = sales[_cardId];
         require(sale.isAvailable, unicode"La carte n'est plus disponible.");
 
-        //payable(sale.seller).transfer(msg.value);
+        payable(sale.seller).transfer(msg.value);
         collection.transferForMarket(sale.seller, sender, _cardId);
 
         sale.isAvailable = false;
         emit CardSold(sale.cardId, msg.sender);
     }
 
-    function removeSale(string memory _cardId) external {
+    function removeSale(string memory _cardId, address sender) external onlyCardOwner(_cardId, sender) {
         Sale storage sale = sales[_cardId];
-        require(sale.seller == msg.sender, unicode"Vous n'êtes pas le propriétaire de cette vente.");
+        require(msg.sender == sale.seller, unicode"Vous n'êtes pas le propriétaire de cette vente.");
         sale.isAvailable = false;
     }
 

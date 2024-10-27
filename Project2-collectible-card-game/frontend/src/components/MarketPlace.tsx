@@ -87,7 +87,7 @@ const MarketPlace: React.FC = () => {
     async function removeSale(collectionName: string, cardId: string) {
         try {
             await contract.methods
-                .removeSale(collectionName, cardId)
+                .removeSale(collectionName, cardId, account)
                 .send({ from: account });
 
             console.log("Suppression de la carte du marketplace réussie !");

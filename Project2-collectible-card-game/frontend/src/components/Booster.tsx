@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { WalletProps, Card } from '../apiPokeTCG/types';
 import Web3 from 'web3';
 import MainABI from '@/abis/Main.json';
-import Button from 'react-bootstrap/Button';
+import { ethers } from "ethers";
+
 const Booster: React.FC<WalletProps> = ({wallet}) => {
     
     const [boosters, setBoostersValue] = useState<string[]>([])
@@ -54,9 +55,10 @@ const Booster: React.FC<WalletProps> = ({wallet}) => {
       window.contract = await loadContract();
       
       try {
+          const valueInWei = ethers.utils.parseEther("0.3");
           let result = await window.contract.methods
               .openBooster(boosterName, accounts[0])
-              .send({ from: accounts[0] });
+              .send({ from: accounts[0], value: valueInWei });
           
           if (result.events && result.events.BoosterOpened) {
             const boosterOpenedEvent = result.events.BoosterOpened;
