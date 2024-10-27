@@ -6,6 +6,7 @@ import Users from './Users';
 import UserCard from './UserCard';
 import { WalletProps } from '../apiPokeTCG/types';
 import Booster from './Booster';
+import MarketPlace from './MarketPlace';
 
 const Home: React.FC<WalletProps> = ({wallet}) => {
   return (
@@ -28,6 +29,7 @@ const Home: React.FC<WalletProps> = ({wallet}) => {
               <Nav.Link as={Link} to="/sets">Sets</Nav.Link>
               <Nav.Link as={Link} to="/utilisateurs">Utilisateurs</Nav.Link>
               <Nav.Link as={Link} to="/boosters">Boosters</Nav.Link>
+              <Nav.Link as={Link} to="/marketPlace">Market</Nav.Link>
             </Nav>
           </Navbar.Collapse>
         </Container>
@@ -39,8 +41,9 @@ const Home: React.FC<WalletProps> = ({wallet}) => {
           <Route path="/" element={<HomePage />} />
           <Route path="/sets" element={<PokemonSets />} />
           <Route path="/utilisateurs" element={<Users />} />
-          <Route path="/utilisateur/:account" element={<UserCard wallet={wallet}/>} />
-          <Route path="/boosters" element={<Booster wallet={wallet}/>} />
+          <Route path="/utilisateur/:account" element={<UserCard wallet={wallet} />} />
+          <Route path="/boosters" element={<Booster wallet={wallet} />} />
+          <Route path="/marketPlace" element={<MarketPlace />} />
         </Routes>
       </Container>
     </Router>

@@ -15,7 +15,7 @@ const config: HardhatUserConfig = {
     settings: {
       optimizer: {
         enabled: true,
-        runs: 200,
+        runs: 10,
       },
     },
   },
@@ -35,7 +35,7 @@ const config: HardhatUserConfig = {
     clear: true,
     flat: true,
     only: [],
-    pretty: true,
+    pretty: false,
   },
   typechain: {
     outDir: '../typechain',

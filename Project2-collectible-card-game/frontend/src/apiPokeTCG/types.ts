@@ -37,3 +37,8 @@ export interface Card {
   nameCollection: string;
   cardCountCollection: number;
 }
+
+export interface Sale {
+  saleId: number;
+  card: Card;
+}

@@ -1,12 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import styles from './styles.module.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import * as ethereum from '@/lib/ethereum'
 import * as main from '@/lib/main'
 import Home from './components/Home'
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 import './app.css';
 
 type Canceler = () => void

@@ -14,11 +14,11 @@ contract Collection is Ownable, ERC721 {
 
   Card[] public cards;
 
-  mapping (uint => address) cardApprovals;
+  mapping(string => uint) private cardNumToTokenId;
   // indique les propriétaire de chaque cartes
   mapping (uint => address) public cardToOwner;
   // indique le nombre de carte que possede un utilisateur
-  mapping (address => uint) ownerCardCount;
+  mapping (address => uint) public ownerCardCount;
   mapping(string => bool) private cardExists;
 
   modifier onlyOwnerOf(uint _cardId) {
@@ -36,6 +36,7 @@ contract Collection is Ownable, ERC721 {
     cards.push(Card(_num, _img, name, cardCount));
     cardExists[_num] = true;
     uint id = cards.length - 1;
+    cardNumToTokenId[_num] = id;
     cardToOwner[id] = msg.sender;
     ownerCardCount[msg.sender]++;
     emit NewCard(id, _num, _img);
@@ -57,13 +58,8 @@ contract Collection is Ownable, ERC721 {
     return result;
   }
 
-  function getTokenIdByCardNum(string memory _num) external view returns (uint tokenId) {
-    for (uint i = 0; i < cards.length; i++) {
-      if (keccak256(abi.encodePacked(cards[i].num)) == keccak256(abi.encodePacked(_num))) {
-        return i;
-      }
-    }
-    revert(unicode"Identifiant unique du numero correspondant non trouvé");
+  function getTokenIdByCardNum(string memory _num) external view returns (uint) {
+    return cardNumToTokenId[_num];
   }
 
   function balanceOf(address _owner) public view override returns (uint256 _balance) {
@@ -85,13 +81,7 @@ contract Collection is Ownable, ERC721 {
     _transfer(msg.sender, _to, _tokenId);
   }
 
-  function approve(address _to, uint256 _tokenId) public override onlyOwnerOf(_tokenId) {
-    cardApprovals[_tokenId] = _to;
-    emit Approval(msg.sender, _to, _tokenId);
-  }
-
-  function takeOwnership(uint256 _tokenId) public override {
-    require(cardApprovals[_tokenId] == msg.sender);
-    _transfer(ownerOf(_tokenId), msg.sender, _tokenId);
+  function transferForMarket(address _from, address _to, uint256 _tokenId) external {
+    _transfer(_from, _to, _tokenId);
   }
 }

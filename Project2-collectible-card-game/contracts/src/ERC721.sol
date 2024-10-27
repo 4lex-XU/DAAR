@@ -9,6 +9,4 @@ abstract contract ERC721 {
     function balanceOf(address _owner) public view virtual returns (uint256);
     function ownerOf(uint256 _tokenId) public view virtual returns (address);
     function transfer(address _to, uint256 _tokenId) public virtual;
-    function approve(address _to, uint256 _tokenId) public virtual;
-    function takeOwnership(uint256 _tokenId) public virtual;
 }
