@@ -129,7 +129,7 @@ const Booster: React.FC<WalletProps> = ({wallet}) => {
                     ))}
                   </div>
        ) : (
-         <p style={{ fontSize: '1.2rem', color: '#777' }}>Aucun booster disponible.</p>
+         <p style={{ fontSize: '1.2rem', color: '#fff' }}>Aucun booster disponible.</p>
        )}
 
        {receivedCards.length > 0 && (
