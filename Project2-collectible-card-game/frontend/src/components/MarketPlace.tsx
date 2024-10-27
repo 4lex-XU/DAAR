@@ -3,6 +3,8 @@ import { Sale } from '../apiPokeTCG/types';
 import Web3 from 'web3';
 import MainABI from '@/abis/Main.json';
 import { ethers } from "ethers";
+import Button from 'react-bootstrap/Button';
+
 
 const MarketPlace: React.FC = () => {
     const [contract, setContract] = useState(null);
@@ -92,21 +94,54 @@ const MarketPlace: React.FC = () => {
     }
 
     return (
-        <div>
-            <h2>MarketPlace</h2>
-            <h3>Cartes en Vente</h3>
-            <ul>
-                {cardsSale.map((sale, index) => (
-                    <li key={index}>
-                        <h3>{sale.card.num}</h3>
-                        <img src={sale.card.img} alt={sale.card.num} style={{ width: '100px' }} />
-                        <button onClick={() => buyCard(sale.card.nameCollection, sale.saleId)}>Acheter</button>
-                        <button onClick={() => removeSale(sale.card.nameCollection, sale.saleId)}>Retirer de la vente</button>
-                    </li>
-                ))}
-            </ul>
-        </div>
+      <div style={{ padding: '20px'}}>
+        <h2 style={{ fontSize: '1.8rem', marginBottom: '20px', color: '#fff' }}>MarketPlace</h2>
+
+        {cardsSale.length > 0 ? (
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px'}}>
+            {cardsSale.map((sale, index) => (
+              <div
+                key={index}
+                style={{
+                  width: '200px',
+                  padding: '15px',
+                  borderRadius: '8px',
+                  backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                  boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
+                  textAlign: 'center'
+                }}
+              >
+                <h3 style={{ fontSize: '1.2rem', color: '#fff' }}>{sale.card.num}</h3>
+                <img
+                  src={sale.card.img}
+                  alt={sale.card.num}
+                  style={{ width: '100px', height: 'auto', marginBottom: '10px', borderRadius: '8px' }}
+                />
+                <div style={{ display: 'flex', justifyContent: 'space-between', gap: '10px', marginTop: '10px' }}>
+                  <Button
+                    onClick={() => buyCard(sale.card.nameCollection, sale.saleId)}
+                    variant="success"
+                    style={{ fontSize: '0.9rem', padding: '8px 12px', width: '100%' }}
+                  >
+                    Acheter
+                  </Button>
+                  <Button
+                    onClick={() => removeSale(sale.card.nameCollection, sale.saleId)}
+                    variant="danger"
+                    style={{ fontSize: '0.9rem', padding: '8px 12px', width: '100%' }}
+                  >
+                    Retirer
+                  </Button>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p style={{ fontSize: '1.2rem', color: '#777' }}>Aucune carte en vente pour le moment.</p>
+        )}
+      </div>
     );
+
 }
 
 export default MarketPlace;

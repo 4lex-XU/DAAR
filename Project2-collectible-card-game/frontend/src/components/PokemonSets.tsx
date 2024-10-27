@@ -184,7 +184,7 @@ const PokemonSets: React.FC = () => {
                       left: 0,
                       width: '100%',
                       height: '100%',
-                      backgroundColor: 'rgba(0, 0, 0, 0.5)', // Fond sombre avec opacité
+                      backgroundColor: 'rgba(0, 0, 0, 0.5)',
                       zIndex: 1
                     }}
                   ></div>
@@ -235,24 +235,67 @@ const PokemonSets: React.FC = () => {
               )}
               <br/>
               {selectedCards.length > 0 && (
-                  <div>
-                    <p>Cartes sélectionnées : {selectedCards.length}</p>
-                    <input type="text" onChange={handleUserValue} placeholder="Entrer une adresse"></input>
-                    <Button onClick={mintCards}>
-                      Créer et assigner les cartes sélectionnées
-                    </Button>
-                    <Button
-                    variant="warning"
-                    style={{ marginLeft: '10px' }}
-                    onClick={() => setSelectedCards([])}
+                  <div
+                    style={{
+                      textAlign: 'left',
+                      padding: '20px',
+                      borderRadius: '10px',
+                      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                      boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)',
+                      width: '80%',
+                      margin: '0 auto'
+                    }}
                   >
-                    Tout désélectionner
-                  </Button>
-                  <input type="text" onChange={handleNameValue} placeholder="Entrer le nom du nouveau booster"></input>
-                  <Button onClick={createBooster}>
-                    Créer un booster avec les cartes sélectionnées
-                  </Button>
+                    <p style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>Cartes sélectionnées : {selectedCards.length}</p>
+
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '15px' }}>
+                      <input
+                        type="text"
+                        onChange={handleUserValue}
+                        placeholder="Entrez l'adresse du compte"
+                        style={{
+                          padding: '8px',
+                          width: '55%',
+                          borderRadius: '5px',
+                          border: '1px solid #ced4da',
+                          fontSize: '1rem'
+                        }}
+                      />
+                      <Button onClick={mintCards} variant="primary" style={{ fontSize: '0.9rem', padding: '8px 12px' }}>
+                        Créer et assigner
+                      </Button>
+                      <Button
+                        variant="warning"
+                        style={{ fontSize: '0.9rem', padding: '8px 12px' }}
+                        onClick={() => setSelectedCards([])}
+                      >
+                        Tout désélectionner
+                      </Button>
+                    </div>
+
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                      <input
+                        type="text"
+                        onChange={handleNameValue}
+                        placeholder="Entrez le nom du booster"
+                        style={{
+                          padding: '8px',
+                          width: '55%',
+                          borderRadius: '5px',
+                          border: '1px solid #ced4da',
+                          fontSize: '1rem'
+                        }}
+                      />
+                      <Button
+                        onClick={createBooster}
+                        variant="success"
+                        style={{ fontSize: '0.9rem', padding: '8px 12px' }}
+                      >
+                        Créer un booster
+                      </Button>
+                    </div>
                   </div>
+
                 )}
                 <br/>
               <Container>

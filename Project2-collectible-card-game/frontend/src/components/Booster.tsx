@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { WalletProps, Card } from '../apiPokeTCG/types';
 import Web3 from 'web3';
 import MainABI from '@/abis/Main.json';
-
+import Button from 'react-bootstrap/Button';
 const Booster: React.FC<WalletProps> = ({wallet}) => {
     
     const [boosters, setBoostersValue] = useState<string[]>([])
@@ -80,44 +80,86 @@ const Booster: React.FC<WalletProps> = ({wallet}) => {
       openBooster(booster);
     };
 
-    return (
-      <div>
-        <h2>Liste des Boosters</h2>
-        {boosters.length > 0 ? (
-          <div>
-            {boosters.map((boosterName, index) => (
-              <button
-                key={index}
-                onClick={() => handleBoosterSelected(boosterName)}
-                style={{ margin: '10px', padding: '10px' }}
-              >
-                Ouvrir Booster : {boosterName}
-              </button>
-            ))}
-          </div>
-        ) : (
-          <p>Aucun booster disponible.</p>
-        )}
-    
-        {receivedCards.length > 0 ? (
-          <div>
-            <h3>Cartes reçues :</h3>
-            <ul>
-              {receivedCards.map((card, idx) => (
-                <li key={idx}>
-                  <strong>Numéro:</strong> {card.num} <br />
-                  <strong>Image:</strong> <img src={card.img} alt="Card Image" width="50" /> <br />
-                  <strong>Collection:</strong> {card.nameCollection} <br />
-                  <strong>Quantité:</strong> {card.cardCountCollection}
-                </li>
-              ))}
-            </ul>
-          </div>
-        ) : (
-          <p>Aucune cartes disponible</p>
-        )}
-      </div>
-    );
+   return (
+     <div style={{ padding: '20px' }}>
+       <h2 style={{ fontSize: '1.8rem', marginBottom: '20px' }}>Liste des Boosters</h2>
+       {boosters.length > 0 ? (
+         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '15px', marginBottom: '20px' }}>
+                    {boosters.map((boosterName, index) => (
+
+                      <div
+                        key={index}
+                        onClick={() => handleBoosterSelected(boosterName)}
+                        style={{
+                          textAlign: 'center',
+                          position: 'relative',
+                          width: 'auto',
+                          cursor: 'pointer',
+                          padding: '10px',
+                          borderRadius: '8px',
+                          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                          boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)'
+                        }}
+                      >
+                        <p
+                           style={{
+                             fontSize: '1rem',
+                             fontWeight: 'bold',
+                             color: 'white'
+                           }}
+                         >
+                           Booster : {boosterName}
+                         </p>
+                        <div
+                          style={{
+                            position: 'absolute',
+                            top: '0',
+                            left: '0',
+                            right: '0',
+                            bottom: '0',
+                            backgroundColor: 'rgba(0, 0, 0, 0.3)',
+                            borderRadius: '8px',
+                            zIndex: '-1'
+                          }}
+                        ></div>
+
+                        <img src="../../public/booster.png" alt="Booster" width="200" height="auto" />
+
+                      </div>
+                    ))}
+                  </div>
+       ) : (
+         <p style={{ fontSize: '1.2rem', color: '#777' }}>Aucun booster disponible.</p>
+       )}
+
+       {receivedCards.length > 0 && (
+         <div style={{ marginTop: '30px', textAlign: 'left' }}>
+           <h3 style={{ fontSize: '1.5rem', marginBottom: '15px', color: '#333' }}>Cartes reçues :</h3>
+           <ul style={{ listStyleType: 'none', paddingLeft: '0' }}>
+             {receivedCards.map((card, idx) => (
+               <li
+                 key={idx}
+                 style={{
+                   backgroundColor: '#f5f5f5',
+                   padding: '15px',
+                   borderRadius: '8px',
+                   marginBottom: '15px',
+                   boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)'
+                 }}
+               >
+                 <strong>Numéro:</strong> {card.num} <br />
+                 <strong>Image:</strong> <img src={card.img} alt="Card Image" width="50" style={{ borderRadius: '5px' }} /> <br />
+                 <strong>Collection:</strong> {card.nameCollection} <br />
+                 <strong>Quantité:</strong> {card.cardCountCollection}
+               </li>
+             ))}
+           </ul>
+         </div>
+       )}
+     </div>
+   );
+
+
 }
 
 export default Booster;

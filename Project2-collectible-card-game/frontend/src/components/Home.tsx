@@ -27,7 +27,7 @@ const Home: React.FC<WalletProps> = ({wallet}) => {
             <Nav className="me-auto">
               <Nav.Link as={Link} to="/">Home</Nav.Link>
               <Nav.Link as={Link} to="/sets">Sets</Nav.Link>
-              <Nav.Link as={Link} to="/utilisateurs">Utilisateurs</Nav.Link>
+              <Nav.Link as={Link} to="/utilisateurs">Users</Nav.Link>
               <Nav.Link as={Link} to="/boosters">Boosters</Nav.Link>
               <Nav.Link as={Link} to="/marketPlace">Market</Nav.Link>
             </Nav>
@@ -53,9 +53,13 @@ const Home: React.FC<WalletProps> = ({wallet}) => {
 // Composant pour la page d'accueil
 const HomePage: React.FC = () => {
   return (
-    <div>
-      <h1>Bienvenue sur Mon TCG</h1>
-      <p>Ceci est la page d'accueil. Explorez les sets ou les utilisateurs en utilisant la navigation ci-dessus.</p>
+    <div style={{ textAlign: 'center', position: 'relative', padding: '50px' }}>
+      <h1 style={{ fontSize: '4rem', fontWeight: 'bold', marginBottom: '20px' }}>
+          Bienvenue sur Mon TCG
+      </h1>
+      <p style={{ fontSize: '1.5rem' }}>
+          Commencez votre collection Pokémon dès maintenant !
+      </p>
     </div>
   );
 };
