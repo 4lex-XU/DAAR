@@ -115,13 +115,13 @@ contract Main is Ownable {
     emit BoosterOpened(_to, result);
   }
 
-  function listCardForSale(string memory collectionName, string memory cardId) external {
-    tradings[collectionName].listCardForSale(cardId);
+  function listCardForSale(string memory collectionName, string memory cardId, address sender) external {
+    tradings[collectionName].listCardForSale(cardId, sender);
     countCardTrade++;
   }
 
-  function buyCard(string memory collectionName, string memory cardId) external payable {
-    tradings[collectionName].buyCard(cardId);
+  function buyCard(string memory collectionName, string memory cardId, address sender) external payable {
+    tradings[collectionName].buyCard(cardId, sender);
   }
 
   function removeSale(string memory collectionName, string memory cardId) external {

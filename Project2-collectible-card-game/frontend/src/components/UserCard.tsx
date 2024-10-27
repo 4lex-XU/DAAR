@@ -22,7 +22,7 @@ const UserCard: React.FC<WalletProps> = ({ wallet }) => {
       const contract = await loadContract();
 
         await contract.methods
-            .listCardForSale(selectedCard?.nameCollection, selectedCard?.num)
+            .listCardForSale(selectedCard?.nameCollection, selectedCard?.num, account!)
             .send({ from: account });
             
         alert('Carte mise en vente avec succès !');

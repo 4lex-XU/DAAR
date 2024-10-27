@@ -74,7 +74,7 @@ const MarketPlace: React.FC = () => {
         try {
             const valueInWei = ethers.utils.parseEther("0.1");
             await contract.methods
-                .buyCard(collectionName, cardId)
+                .buyCard(collectionName, cardId, account!)
                 .send({ from: account, value: valueInWei });
 
             console.log("Achat de la carte réussi !");

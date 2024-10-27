@@ -30,21 +30,21 @@ contract Trading is Ownable{
         _;
     }
 
-    function listCardForSale(string memory _cardId) external {
+    function listCardForSale(string memory _cardId, address sender) external {
         require(sales[_cardId].isAvailable == false, unicode"Trading de la carte deja effectué");
-        sales[_cardId] = Sale(saleCounter, _cardId, msg.sender, true);
+        sales[_cardId] = Sale(saleCounter, _cardId, sender, true);
         saleNames.push(_cardId);
         emit CardListed(saleCounter, _cardId, msg.sender);
         saleCounter++;
     }
 
-    function buyCard(string memory _cardId) external payable {
+    function buyCard(string memory _cardId, address sender) external payable {
         require(msg.sender != sales[_cardId].seller, unicode"L'emetteur ne peut pas acheter sa propre carte");
         Sale storage sale = sales[_cardId];
         require(sale.isAvailable, unicode"La carte n'est plus disponible.");
 
         //payable(sale.seller).transfer(msg.value);
-        collection.transferForMarket(sale.seller, msg.sender, _cardId);
+        collection.transferForMarket(sale.seller, sender, _cardId);
 
         sale.isAvailable = false;
         emit CardSold(sale.cardId, msg.sender);
@@ -59,7 +59,7 @@ contract Trading is Ownable{
     function getAllSale() external view returns (uint256[] memory, Card[] memory) {
         uint256 availableSaleCount = 0;
         for (uint256 i = 0; i < saleCounter; i++) {
-            if (sales[saleNames[i]].isAvailable) {
+            if (sales[saleNames[i]].isAvailable == true) {
                 availableSaleCount++;
             }
         }
@@ -68,7 +68,7 @@ contract Trading is Ownable{
         Card[] memory cardsSale = new Card[](availableSaleCount);
         uint256 index = 0;
         for (uint256 i = 0; i < saleCounter; i++) {
-            if (sales[saleNames[i]].isAvailable) {
+            if (sales[saleNames[i]].isAvailable == true) {
                 saleIds[index] = sales[saleNames[i]].saleId;
                 (string memory name, string memory img, string memory nameCollection, uint256 cardCountCollection) = collection.cards(collection.getTokenIdByCardNum(saleNames[i]));
                 cardsSale[index] = Card(name, img, nameCollection, cardCountCollection);
