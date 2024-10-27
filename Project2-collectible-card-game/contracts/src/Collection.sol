@@ -81,7 +81,9 @@ contract Collection is Ownable, ERC721 {
     _transfer(msg.sender, _to, _tokenId);
   }
 
-  function transferForMarket(address _from, address _to, uint256 _tokenId) external {
-    _transfer(_from, _to, _tokenId);
+  function transferForMarket(address _from, address _to, string memory _cardId) external {
+    uint tokenId = cardNumToTokenId[_cardId];
+    require(cardToOwner[tokenId] == _from, unicode"L'adresse source n'est pas le propriétaire de cette carte.");
+    _transfer(_from, _to, tokenId);
   }
 }

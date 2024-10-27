@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Sale } from '../apiPokeTCG/types';
+import { Card, Sale } from '../apiPokeTCG/types';
 import Web3 from 'web3';
 import MainABI from '@/abis/Main.json';
 import { ethers } from "ethers";
 import Button from 'react-bootstrap/Button';
-
 
 const MarketPlace: React.FC = () => {
     const [contract, setContract] = useState(null);
@@ -51,26 +50,31 @@ const MarketPlace: React.FC = () => {
         try {
             const result = await contract.methods.getAllSales().call();
 
-            console.log('Résultat de getAllSales:', result);
-
             const saleIds = result[0];
             const cards = result[1];
 
-            const formattedSales: Sale[] = saleIds.map((id: number, index: number) => ({
-                saleId: id,
-                card: cards[index],
+            const formattedSales: Sale[] = cards.map((card: Card, index: number) => ({
+                saleId: saleIds[index],
+                card: {
+                    num: card.num,
+                    img: card.img,
+                    nameCollection: card.nameCollection,
+                    cardCountCollection: card.cardCountCollection,
+                },
             }));
+
             setCardsSale(formattedSales);
+            console.log('Résultat de getAllSales:', formattedSales);
         } catch (error) {
             console.error('Erreur lors de la récupération des cartes :', error);
         }
-    };
+    }
 
-    async function buyCard(collectionName: string, saleId: number) {
+    async function buyCard(collectionName: string, cardId: string) {
         try {
             const valueInWei = ethers.utils.parseEther("0.1");
             await contract.methods
-                .buyCard(collectionName, saleId) 
+                .buyCard(collectionName, cardId)
                 .send({ from: account, value: valueInWei });
 
             console.log("Achat de la carte réussi !");
@@ -80,10 +84,10 @@ const MarketPlace: React.FC = () => {
         }
     }
 
-    async function removeSale(collectionName: string, saleId: number) {
+    async function removeSale(collectionName: string, cardId: string) {
         try {
             await contract.methods
-                .removeSale(collectionName, saleId) 
+                .removeSale(collectionName, cardId)
                 .send({ from: account });
 
             console.log("Suppression de la carte du marketplace réussie !");
@@ -119,14 +123,14 @@ const MarketPlace: React.FC = () => {
                 />
                 <div style={{ display: 'flex', justifyContent: 'space-between', gap: '10px', marginTop: '10px' }}>
                   <Button
-                    onClick={() => buyCard(sale.card.nameCollection, sale.saleId)}
+                    onClick={() => buyCard(sale.card.nameCollection, sale.card.num)}
                     variant="success"
                     style={{ fontSize: '0.9rem', padding: '8px 12px', width: '100%' }}
                   >
                     Acheter
                   </Button>
                   <Button
-                    onClick={() => removeSale(sale.card.nameCollection, sale.saleId)}
+                    onClick={() => removeSale(sale.card.nameCollection, sale.card.num)}
                     variant="danger"
                     style={{ fontSize: '0.9rem', padding: '8px 12px', width: '100%' }}
                   >

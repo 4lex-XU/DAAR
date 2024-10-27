@@ -120,12 +120,12 @@ contract Main is Ownable {
     countCardTrade++;
   }
 
-  function buyCard(string memory collectionName, uint256 saleId) external payable {
-    tradings[collectionName].buyCard(saleId);
+  function buyCard(string memory collectionName, string memory cardId) external payable {
+    tradings[collectionName].buyCard(cardId);
   }
 
-  function removeSale(string memory collectionName, uint256 saleId) external {
-    tradings[collectionName].removeSale(saleId);
+  function removeSale(string memory collectionName, string memory cardId) external {
+    tradings[collectionName].removeSale(cardId);
   }
 
   function getAllSales() external view returns (uint256[] memory ids, Card[] memory cards) {

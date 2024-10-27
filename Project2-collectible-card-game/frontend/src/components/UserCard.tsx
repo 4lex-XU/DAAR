@@ -21,13 +21,12 @@ const UserCard: React.FC<WalletProps> = ({ wallet }) => {
       await loadWeb3();
       const contract = await loadContract();
 
-      await contract.methods
-        .listCardForSale(selectedCard.nameCollection, selectedCard.num)
-        .send({ from: account });
-
-      alert('Carte mise en vente avec succès !');
-      setSelectedCard(undefined);
-      setShowModal(false);
+        await contract.methods
+            .listCardForSale(selectedCard?.nameCollection, selectedCard?.num)
+            .send({ from: account });
+            
+        alert('Carte mise en vente avec succès !');
+        setShowModal(false);
     } catch (error) {
       console.error("Erreur lors de la mise en vente de la carte :", error);
     }
@@ -62,22 +61,23 @@ const UserCard: React.FC<WalletProps> = ({ wallet }) => {
   }, []);
 
   async function getCardsByOwner() {
-    if (wallet?.contract && wallet?.details.account) {
-      try {
-        const data = await wallet.contract.getCardsByOwner(account!);
-        const formattedCards = data.map((tuple: any) => ({
-          num: tuple.num || tuple[0],
-          img: tuple.img || tuple[1],
-          nameCollection: tuple.nameCollection || tuple[2],
-          cardCountCollection: tuple.cardCountCollection || tuple[3]
-        }));
-        setCardsValue(formattedCards);
-        console.log('getCardsByOwner: ' + wallet.details.account + ' réussie !');
-      } catch (err) {
-        console.log('Erreur lors du getCardsByOwner.');
-        console.error(err);
+      if (wallet?.contract && wallet?.details.account) {
+          try {
+          const data = await wallet.contract.getCardsByOwner(account!)
+          const formattedCards = data.map((tuple: any) => ({
+              num: tuple.num || tuple[0],
+              img: tuple.img || tuple[1],
+              nameCollection: tuple.nameCollection || tuple[2],
+              cardCountCollection: tuple.cardCountCollection || tuple[3]
+          }));
+          setCardsValue(formattedCards);
+          console.log("Cartes du joueur :", formattedCards);
+          console.log('getCardsByOwner: '+wallet.details.account+' reussie !')
+          } catch (err) {
+          console.log('Erreur lors du getCardsByOwner.')
+          console.error(err)
+          }
       }
-    }
   }
 
   return (
